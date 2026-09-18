@@ -13,10 +13,11 @@
       <div id="rs-flor-der"><img src="/imagenes/flor.png" alt="" /></div>
 
       <!-- ── Título ── -->
-      <p id="rs-solo" class="font-great-vibes">Solo</p>
-      <p id="rs-adultos" class="font-cinzel">Adultos</p>
+      <p id="rs-titulo" class="font-halfterm">
+        <span id="rs-solo">Solo</span> <span id="rs-adultos">Adultos</span>
+      </p>
 
-      <!-- separador dorado -->
+      <!-- separador de la casa -->
       <div id="rs-divisor">
         <span class="rs-div-linea"></span>
         <span class="rs-div-rombo"></span>
@@ -24,11 +25,11 @@
       </div>
 
       <!-- ── Texto ── -->
-      <p id="rs-texto" class="font-cinzel">
-        Evento exclusivo para adultos <span class="rs-emoji">🤍✨</span>
+      <p id="rs-texto" class="font-halfterm">
+        Evento exclusivo para adultos <span class="rs-emoji">🤍</span>
       </p>
 
-      <p id="rs-gracias" class="font-cinzel">
+      <p id="rs-gracias" class="font-halfterm">
         Agradecemos mucho su comprensión
       </p>
     </div>
@@ -60,16 +61,19 @@
   }
 
   /* ═══════ TARJETA ═══════ */
-  /* La misma del contador: rectángulo blanco con trazo rosa. */
+  /* La misma del contador: crema con borde rosa pálido. El crema va como
+     imagen, que el modo oscuro forzado oscurece los colores pero respeta
+     las imágenes. */
   #rs-card {
     position: relative;
     z-index: 2;
     margin: 0 5cqw;
     padding: 7cqw 6cqw 6.5cqw;
     text-align: center;
-    background: #ffffff;
-    border: 1px solid #e5a8bd;
+    background-image: linear-gradient(#fdf3f1, #fdf3f1);
+    border: 1px solid #f0d7d6;
     border-radius: 8cqw;
+    box-shadow: 0 3px 14px rgba(200, 165, 155, 0.18);
     /* recorta las flores contra la curva de las esquinas */
     overflow: hidden;
   }
@@ -107,31 +111,25 @@
   }
 
   /* ── Título ── */
-  #rs-solo {
+  /* Las dos palabras en un solo renglón, ambas en verde. */
+  #rs-titulo {
     position: relative;
     z-index: 2;
     margin: 0;
-    font-size: 9cqw;
-    line-height: 1;
-    color: #e58aa6;
+    font-size: 8.6cqw;
+    line-height: 1.15;
+    font-weight: 400;
+    color: var(--verde-texto);
     text-shadow: 0 1px 0 rgba(255, 255, 255, 0.85);
   }
 
+  /* inline-block porque GSAP las mueve una por una */
+  #rs-solo,
   #rs-adultos {
-    position: relative;
-    z-index: 2;
-    margin: 0.8cqw 0 0;
-    font-size: 5.2cqw;
-    line-height: 1.1;
-    font-weight: 400;
-    letter-spacing: 0.18em;
-    /* compensa el espacio que letter-spacing deja tras la última letra */
-    text-indent: 0.18em;
-    text-transform: uppercase;
-    color: #c08b3e;
+    display: inline-block;
   }
 
-  /* ── Separador dorado ── */
+  /* ── Separador de la casa ── */
   #rs-divisor {
     position: relative;
     z-index: 2;
@@ -142,11 +140,24 @@
     margin-top: 4.5cqw;
   }
 
+  /* la línea nace transparente y se va tiñendo hacia el centro */
   .rs-div-linea {
     display: block;
     width: 14cqw;
     height: 1px;
-    background: rgba(192, 139, 62, 0.7);
+    background-image: linear-gradient(
+      to right,
+      rgba(169, 192, 141, 0),
+      var(--verde-suave)
+    );
+  }
+
+  #rs-divisor .rs-div-linea:last-child {
+    background-image: linear-gradient(
+      to left,
+      rgba(169, 192, 141, 0),
+      var(--verde-suave)
+    );
   }
 
   .rs-div-rombo {
@@ -154,8 +165,8 @@
     width: 1.6cqw;
     height: 1.6cqw;
     transform: rotate(45deg);
-    border: 1px solid #c08b3e;
-    background: rgba(192, 139, 62, 0.25);
+    border: 1px solid var(--verde-suave);
+    background-image: linear-gradient(var(--rosa-bebe), var(--rosa-bebe));
   }
 
   /* ── Texto ── */
@@ -164,19 +175,16 @@
     z-index: 2;
     margin: 4.5cqw auto 0;
     max-width: 66cqw;
-    font-size: 3.8cqw;
-    line-height: 1.7;
-    font-weight: 600;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: #4f4340;
+    font-size: 5.6cqw;
+    line-height: 1.45;
+    font-weight: 400;
+    color: var(--beige-texto);
   }
 
-  /* los emojis no llevan versalitas ni tracking */
+  /* el corazón no lleva la cursiva de al lado */
   .rs-emoji {
     display: inline-block;
-    letter-spacing: normal;
-    text-transform: none;
+    font-family: inherit;
   }
 
   #rs-gracias {
@@ -184,11 +192,10 @@
     z-index: 2;
     margin: 3.5cqw auto 0;
     max-width: 66cqw;
-    font-size: 4.2cqw;
-    line-height: 1.6;
-    font-weight: 500;
-    letter-spacing: 0.05em;
-    color: #e58aa6;
+    font-size: 5.8cqw;
+    line-height: 1.4;
+    font-weight: 400;
+    color: var(--fucsia-texto);
   }
 </style>
 

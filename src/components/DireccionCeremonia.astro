@@ -9,7 +9,7 @@ const lugar = {
   salon: "Salón de Eventos",
   salon2: '"Keilani"',
   direccion: "Calle Cívica, Cobija - Pando",
-  hora: "14:30 hrs.",
+  hora: "16:00 hrs.",
 };
 
 // El punto exacto que mandó el cliente, abierto en Google Maps: las
@@ -94,6 +94,13 @@ const CORAZON =
       <p id="cf-texto" class="font-halfterm">
         Nos encantará saber que nos acompañarás. Permítenos preparar los
         detalles confirmando tu asistencia.
+      </p>
+
+      <!-- El plazo, pegado al botón y destacado: es el dato que la gente
+           pasa por alto y después confirma tarde. -->
+      <p id="cf-plazo" class="font-halfterm">
+        Confirmar asistencia hasta el
+        <span class="cf-plazo-fecha">26 de septiembre</span>
       </p>
 
       <div id="cf-botones">
@@ -417,6 +424,33 @@ const CORAZON =
     color: var(--beige-texto);
   }
 
+  /* ── El plazo para confirmar ── */
+  /* Va en su propia pastilla blanca sobre el crema del arco, para que se
+     vea aparte del texto de arriba. El blanco va como imagen, igual que el
+     resto de los fondos. */
+  #cf-plazo {
+    position: relative;
+    z-index: 2;
+    display: inline-block;
+    margin: 4cqw auto 0;
+    padding: 2.2cqw 5cqw;
+    border-radius: 999px;
+    background-image: linear-gradient(#ffffff, #ffffff);
+    border: 1px dashed #e9c3c4;
+    box-shadow: 0 2px 7px rgba(190, 150, 145, 0.18);
+    font-size: 5cqw;
+    line-height: 1.4;
+    font-weight: 400;
+    color: var(--beige-texto);
+  }
+
+  /* la fecha, que es lo que tiene que quedar grabado: en su propio
+     renglón, centrada bajo la frase */
+  .cf-plazo-fecha {
+    display: block;
+    color: var(--fucsia-texto);
+  }
+
   /* ── Botón de WhatsApp ── */
   #cf-botones {
     position: relative;
@@ -426,7 +460,7 @@ const CORAZON =
     flex-direction: column;
     align-items: center;
     gap: 2.6cqw;
-    margin-top: 4.5cqw;
+    margin-top: 3.2cqw;
   }
 
   .cf-boton {
@@ -797,7 +831,13 @@ const CORAZON =
       "#dc-hora",
       "#dc-boton",
     ];
-    const itemsConf = ["#cf-titulo", "#cf-divisor", "#cf-texto", "#cf-botones"];
+    const itemsConf = [
+      "#cf-titulo",
+      "#cf-divisor",
+      "#cf-texto",
+      "#cf-plazo",
+      "#cf-botones",
+    ];
 
     // ── Modal de confirmación ──────────────────────────────────
     // El nombre no se escribe dos veces: se toma de la tarjeta del pase, así
