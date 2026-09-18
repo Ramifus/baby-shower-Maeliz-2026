@@ -1,0 +1,44 @@
+---
+// src/pages/index.astro
+import Layout from "../layouts/Layout.astro";
+import Portada from "../components/Portada.astro";
+import NombresFlores from "../components/NombresFlores.astro";
+import NombrePadres from "../components/NombresPadres.astro";
+import Fecha from "../components/Fecha.astro";
+import Contador from "../components/Contador.astro";
+import Invitado from "../components/Invitado.astro";
+import DireccionCeremonia from "../components/DireccionCeremonia.astro";
+import CodigoVestimenta from "../components/CodigoVestimenta.astro";
+import Despedida from "../components/Despedida.astro";
+import Restriccion from "../components/Restriccion.astro";
+import SugerenciaRegalo from "../components/SugerenciaRegalo.astro";
+import Regalo from "../components/Regalo.astro";
+---
+
+<Layout title="Baby Shower">
+    <!-- PORTADA (se muestra primero, bloquea el scroll) -->
+    <Portada />
+
+    <!-- CONTENIDO PRINCIPAL (se anima al abrir el sobre) -->
+    <div id="contenido-principal">
+        <NombresFlores />
+        <NombrePadres />
+        <Fecha />
+        <Contador />
+
+        <!-- La tarjeta del pase: el nombre del invitado -->
+        <Invitado />
+        <DireccionCeremonia />
+
+        <!-- Los tonos sugeridos para vestir -->
+        <CodigoVestimenta />
+
+        <!-- CIERRE: el saludo final y la patita en su jardín -->
+        <Despedida />
+        <!-- <Restriccion /> -->
+        <!-- <SugerenciaRegalo /> -->
+
+        <!-- CIERRE: regalo + guarda la fecha -->
+        <!-- <Regalo /> -->
+    </div>
+</Layout>

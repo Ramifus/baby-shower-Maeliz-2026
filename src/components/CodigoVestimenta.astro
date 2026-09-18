@@ -1,0 +1,262 @@
+---
+// src/components/CodigoVestimenta.astro
+// Código de vestimenta: la paleta del evento en muestras redondas, con el
+// nombre de cada tono debajo. Misma tarjeta crema con pespunte que el resto.
+//
+// Los tonos son los mismos de global.css. Van con su valor escrito y no con
+// var(): estos círculos SON el color, así que tienen que verse iguales pase
+// lo que pase con el tema del navegador.
+const tonos = [
+  { nombre: "Rosa bebé", color: "#f7c6ce" },
+  { nombre: "Amarillo pastel", color: "#f7e3a1" },
+  { nombre: "Blanco", color: "#ffffff" },
+  { nombre: "Verde suave", color: "#a9c08d" },
+  { nombre: "Beige nude", color: "#c9a98a" },
+  { nombre: "Fucsia suave", color: "#d9738f" },
+];
+
+// El mismo corazoncito que usan los demás bloques.
+const CORAZON =
+  "M10 17 C 1 9.5, 0.5 4, 4.5 1.8 C 7.2 0.3, 9 2.5, 10 4.6 C 11 2.5, 12.8 0.3, 15.5 1.8 C 19.5 4, 19 9.5, 10 17 Z";
+---
+
+<section id="vestimenta-section">
+  <div id="cv-wrap">
+    <!-- ═══════ TARJETA ═══════ -->
+    <div id="cv-card">
+      <p id="cv-titulo" class="font-halfterm">Código de vestimenta</p>
+
+      <!-- el separador de la casa: dos líneas que se desvanecen y el
+           corazón al centro -->
+      <div id="cv-divisor">
+        <span class="cv-div-linea"></span>
+        <svg class="cv-div-corazon" viewBox="0 0 20 18" aria-hidden="true">
+          <path d={CORAZON}></path>
+        </svg>
+        <span class="cv-div-linea cv-div-linea-der"></span>
+      </div>
+
+      <p id="cv-texto" class="font-halfterm">
+        Nos encantaría verte en estos tonos
+      </p>
+
+      <!-- ── Las muestras ── -->
+      <ul id="cv-paleta">
+        {
+          tonos.map((t) => (
+            <li class="cv-tono">
+              <span
+                class="cv-muestra"
+                style={`background-image: linear-gradient(${t.color}, ${t.color});`}
+              />
+              <span class="cv-nombre font-halfterm">{t.nombre}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  #vestimenta-section {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    overflow-x: hidden;
+    background: transparent;
+    padding: 1rem 0 2rem;
+  }
+
+  #cv-wrap {
+    position: relative;
+    width: min(100vw, 480px);
+    container-type: inline-size;
+  }
+
+  /* ═══════ TARJETA ═══════ */
+  /* El mismo marco crema con pespunte que las demás. El crema va como
+     imagen: el modo oscuro forzado oscurece los colores pero respeta las
+     imágenes, y acá los colores son justamente el contenido. */
+  #cv-card {
+    position: relative;
+    z-index: 2;
+    margin: 0 5cqw;
+    padding: 8cqw 5cqw 8cqw;
+    text-align: center;
+    background-image: linear-gradient(#fdf3f1, #fdf3f1);
+    border: 1px solid #f0d7d6;
+    border-radius: 6cqw;
+    box-shadow: 0 3px 14px rgba(200, 165, 155, 0.18);
+  }
+
+  /* el pespunte, una línea cortada por dentro del borde */
+  #cv-card::before {
+    content: "";
+    position: absolute;
+    inset: 2cqw;
+    border: 1px dashed #e9c3c4;
+    border-radius: 4.4cqw;
+    pointer-events: none;
+  }
+
+  /* ── Título y texto ── */
+  #cv-titulo {
+    position: relative;
+    z-index: 2;
+    margin: 0;
+    font-size: 8.6cqw;
+    line-height: 1.15;
+    font-weight: 400;
+    color: var(--fucsia-texto);
+  }
+
+  #cv-divisor {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2.6cqw;
+    margin-top: 2.6cqw;
+  }
+
+  /* la línea nace transparente y se va tiñendo hacia el corazón */
+  .cv-div-linea {
+    display: block;
+    width: 16cqw;
+    height: 1px;
+    background-image: linear-gradient(
+      to right,
+      rgba(169, 192, 141, 0),
+      var(--verde-suave)
+    );
+  }
+
+  .cv-div-linea-der {
+    background-image: linear-gradient(
+      to left,
+      rgba(169, 192, 141, 0),
+      var(--verde-suave)
+    );
+  }
+
+  .cv-div-corazon {
+    flex: none;
+    width: 4cqw;
+    height: auto;
+    fill: var(--rosa-bebe);
+  }
+
+  #cv-texto {
+    position: relative;
+    z-index: 2;
+    margin: 3.4cqw auto 0;
+    max-width: 70cqw;
+    font-size: 5.4cqw;
+    line-height: 1.45;
+    font-weight: 400;
+    color: var(--beige-texto);
+  }
+
+  /* ── La paleta ── */
+  /* Tres por renglón: con seis tonos quedan dos filas parejas. */
+  #cv-paleta {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 5cqw 2cqw;
+    margin: 6cqw 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .cv-tono {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2cqw;
+  }
+
+  /* el círculo con su aro blanco, para que el tono no se pegue al crema */
+  .cv-muestra {
+    display: block;
+    width: 17cqw;
+    height: 17cqw;
+    border-radius: 999px;
+    border: 1px solid #ecd4d2;
+    box-shadow:
+      0 0 0 1.4cqw #ffffff,
+      0 3px 9px rgba(190, 150, 145, 0.28);
+  }
+
+  .cv-nombre {
+    display: block;
+    font-size: 4.2cqw;
+    line-height: 1.25;
+    font-weight: 400;
+    color: var(--beige-texto);
+  }
+</style>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+  gsap.registerPlugin(ScrollTrigger);
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const inicial = () => {
+      gsap.set("#cv-card", { opacity: 0, y: 24, scale: 0.97 });
+      gsap.set("#cv-titulo", { opacity: 0, y: -16 });
+      gsap.set("#cv-divisor", { opacity: 0, scaleX: 0.3 });
+      gsap.set("#cv-texto", { opacity: 0, y: 14 });
+      // las muestras entran una tras otra, creciendo
+      gsap.set(".cv-tono", { opacity: 0, y: 18, scale: 0.8 });
+    };
+
+    inicial();
+
+    ScrollTrigger.create({
+      trigger: "#vestimenta-section",
+      start: "top 82%",
+      onEnter: () => {
+        const tl = gsap.timeline();
+        tl.to(
+          "#cv-card",
+          { opacity: 1, y: 0, scale: 1, duration: 1.1, ease: "power2.out" },
+          0,
+        )
+          .to(
+            "#cv-titulo",
+            { opacity: 1, y: 0, duration: 1.1, ease: "power2.out" },
+            0.2,
+          )
+          .to(
+            "#cv-divisor",
+            { opacity: 1, scaleX: 1, duration: 1.1, ease: "power3.out" },
+            0.35,
+          )
+          .to(
+            "#cv-texto",
+            { opacity: 1, y: 0, duration: 1.1, ease: "power2.out" },
+            0.45,
+          )
+          .to(
+            ".cv-tono",
+            {
+              opacity: 1,
+              y: 0,
+              scale: 1,
+              duration: 0.9,
+              stagger: 0.09,
+              ease: "back.out(1.6)",
+            },
+            0.6,
+          );
+      },
+      onLeaveBack: inicial,
+    });
+  });
+</script>

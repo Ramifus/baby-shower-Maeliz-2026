@@ -1,0 +1,986 @@
+---
+// src/components/DireccionCeremonia.astro
+// Recepción + Confirmar asistencia en un solo bloque: el arco rosa arriba a la
+// derecha y, montado por delante, el arco crema con la confirmación.
+// Misma estructura de siempre, con la paleta y la tipografía del resto de la
+// invitación: el arco crema lleva el pespunte de las otras tarjetas.
+
+const lugar = {
+  salon: "Salón de Eventos",
+  salon2: '"Keilani"',
+  direccion: "Calle Cívica, Cobija - Pando",
+  hora: "14:30 hrs.",
+};
+
+// El punto exacto que mandó el cliente, abierto en Google Maps: las
+// coordenadas van tal cual, así el botón cae en el salón y no en una
+// búsqueda por nombre.
+const mapa =
+  "https://www.google.com/maps/search/?api=1&query=-11.021406,-68.758619";
+
+// La respuesta no sale a ningún lado todavía: se queda en el navegador y el
+// invitado ve el acuse. Cuando esté la base de datos, el envío se engancha
+// en la función responder() del script de abajo, que ya es el único lugar
+// donde se decide qué pasa al contestar.
+// WhatsApps de los papás, por si hicieran falta: mami 59170732122,
+// papi 59177647481 (Bolivia, +591).
+
+// El mismo corazoncito que usan los demás bloques.
+const CORAZON =
+  "M10 17 C 1 9.5, 0.5 4, 4.5 1.8 C 7.2 0.3, 9 2.5, 10 4.6 C 11 2.5, 12.8 0.3, 15.5 1.8 C 19.5 4, 19 9.5, 10 17 Z";
+---
+
+<section id="ceremonia-section">
+  <div id="dc-wrap">
+    <!-- ═══════ ARCO ROSA — RECEPCIÓN ═══════ -->
+    <div id="dc-arco">
+      <h3 id="dc-titulo" class="font-halfterm">Recepción</h3>
+
+      <!-- Pin de ubicación -->
+      <svg id="dc-pin" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path
+          d="M12 2.6c-3.6 0-6.5 2.9-6.5 6.5 0 4.6 5.7 10.4 6 10.6.3.3.7.3 1 0 .3-.3 6-6 6-10.6 0-3.6-2.9-6.5-6.5-6.5Zm0 9.2a2.7 2.7 0 1 1 0-5.4 2.7 2.7 0 0 1 0 5.4Z"
+          fill="#ffffff"></path>
+        <ellipse
+          cx="12"
+          cy="20.6"
+          rx="4.6"
+          ry="1.5"
+          stroke="#ffffff"
+          stroke-width="1.4"></ellipse>
+      </svg>
+
+      <p id="dc-salon" class="font-halfterm">
+        {lugar.salon}<br />{lugar.salon2}
+      </p>
+
+      <p id="dc-direccion" class="font-halfterm">{lugar.direccion}</p>
+
+      <p id="dc-hora" class="font-halfterm">{lugar.hora}</p>
+
+      <a
+        id="dc-boton"
+        class="font-halfterm"
+        href={mapa}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Ver ubicación
+      </a>
+    </div>
+
+    <!-- ═══════ FLORES (izquierda) ═══════ -->
+    <div id="dc-flor"><img src="/imagenes/lateral2.png" alt="" /></div>
+
+    <!-- ═══════ ARCO CREMA — CONFIRMAR ASISTENCIA ═══════ -->
+    <div id="cf-arco">
+      <h3 id="cf-titulo" class="font-halfterm">
+        Confirmar<br />Asistencia
+      </h3>
+
+      <!-- el mismo separador que la fecha: dos líneas que se desvanecen y
+           el corazón al centro -->
+      <div id="cf-divisor">
+        <span class="cf-div-linea"></span>
+        <svg class="cf-div-corazon" viewBox="0 0 20 18" aria-hidden="true">
+          <path d={CORAZON}></path>
+        </svg>
+        <span class="cf-div-linea cf-div-linea-der"></span>
+      </div>
+
+      <p id="cf-texto" class="font-halfterm">
+        Nos encantará saber que nos acompañarás. Permítenos preparar los
+        detalles confirmando tu asistencia.
+      </p>
+
+      <div id="cf-botones">
+        <button id="cf-abrir" class="cf-boton font-halfterm" type="button">
+          <svg class="cf-wa" viewBox="0 0 24 24" aria-hidden="true">
+            <path
+              d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.7 4.8-1.3A10 10 0 1 0 12 2Zm5.6 14.1c-.2.7-1.2 1.3-1.9 1.4-.5.1-1.1.2-3.2-.7-2.7-1.1-4.4-3.9-4.5-4-.1-.2-1.1-1.4-1.1-2.7s.7-1.9.9-2.2c.2-.2.5-.3.6-.3h.5c.2 0 .4 0 .6.4l.8 2c.1.2 0 .4 0 .5l-.4.5-.3.3c-.1.1-.2.3 0 .5.2.4.8 1.3 1.7 2.1 1.1 1 2 1.3 2.3 1.4.2.1.4.1.5-.1l.8-.9c.2-.2.3-.2.5-.1l2 .9c.2.1.4.2.4.3.1.2.1.7-.2 1.7Z"
+            ></path>
+          </svg>
+          Confirmar asistencia
+        </button>
+      </div>
+
+      <!-- El acuse, debajo del botón. Aparece recién cuando la persona
+           contesta y queda guardado en el navegador, así lo sigue viendo si
+           vuelve a abrir la invitación. -->
+      <div id="cf-hecho" hidden>
+        <svg id="cf-hecho-icono" viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="12" r="11" fill="currentColor" opacity="0.16"
+          ></circle>
+          <path
+            d="M6.5 12.4 L10.3 16 L17.5 8.4"
+            stroke="currentColor"
+            stroke-width="2.2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            fill="none"></path>
+        </svg>
+        <p id="cf-hecho-texto" class="font-halfterm"></p>
+      </div>
+    </div>
+
+    <!-- ═══════ PATO (esquina inferior derecha) ═══════ -->
+    <div id="dc-mariposa"><img src="/imagenes/pato.png" alt="" /></div>
+  </div>
+
+  <!-- ═══════ MODAL DE CONFIRMACIÓN ═══════ -->
+  <!-- Va fuera de #dc-wrap a propósito: ese div es contenedor de consulta
+       (container-type) y eso lo vuelve el marco de referencia de todo lo
+       que esté position: fixed adentro, así que el modal no llegaría a
+       cubrir la pantalla. -->
+  <div id="cf-modal" hidden>
+    <div id="cf-fondo"></div>
+
+    <div
+      id="cf-caja"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="cf-modal-titulo"
+    >
+      <img id="cf-modal-mono" src="/imagenes/separador.png" alt="" />
+
+      <button id="cf-cerrar" type="button" aria-label="Cerrar">
+        <svg viewBox="0 0 20 20" aria-hidden="true">
+          <path
+            d="M5 5 L15 15 M15 5 L5 15"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"></path>
+        </svg>
+      </button>
+
+      <p id="cf-modal-titulo" class="font-halfterm">¿Nos acompañas?</p>
+
+      <!-- el nombre del invitado, sobre su placa blanca -->
+      <div id="cf-modal-pase">
+        <p id="cf-modal-nombre" class="font-halfterm"></p>
+      </div>
+
+      <p id="cf-modal-texto" class="font-halfterm">
+        Contanos si vas a poder venir a compartir este día con nosotros.
+      </p>
+
+      <div id="cf-modal-botones">
+        <button
+          id="cf-si"
+          class="cf-opcion cf-opcion-si font-halfterm"
+          type="button"
+        >
+          <svg class="cf-tilde" viewBox="0 0 20 20" aria-hidden="true">
+            <path
+              d="M4 10.5 L8.2 14.5 L16 6"
+              stroke="currentColor"
+              stroke-width="2.2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              fill="none"></path>
+          </svg>
+          Sí, ahí estaré
+        </button>
+
+        <button
+          id="cf-no"
+          class="cf-opcion cf-opcion-no font-halfterm"
+          type="button"
+        >
+          No podré asistir
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  #ceremonia-section {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    overflow-x: hidden;
+    background: transparent;
+    padding: 0.5rem 0 1.5rem;
+  }
+
+  #dc-wrap {
+    position: relative;
+    width: min(100vw, 480px);
+    container-type: inline-size;
+  }
+
+  #dc-wrap img {
+    display: block;
+    user-select: none;
+    -webkit-user-drag: none;
+    pointer-events: none;
+  }
+
+  /* ═══════ ARCO ROSA ═══════ */
+  #dc-arco {
+    position: absolute;
+    top: 0;
+    left: 24cqw;
+    width: 80cqw;
+    /* más largo, para que el botón quede bien arriba del arco crema */
+    height: 120cqw;
+    z-index: 1;
+    padding: 14cqw 8cqw 0;
+    text-align: center;
+    /* cúpula semicircular arriba, esquinas suaves abajo */
+    border-radius: 40cqw 40cqw 5cqw 5cqw / 38cqw 38cqw 5cqw 5cqw;
+    /* el rosa va como imagen, igual que los otros fondos: el modo oscuro
+       forzado oscurece colores, pero respeta las imágenes. Encima, la
+       textura de puntitos. */
+    background-image: radial-gradient(
+        circle,
+        rgba(255, 255, 255, 0.2) 1px,
+        transparent 1.3px
+      ),
+      linear-gradient(#e79fb5, #e79fb5);
+    background-size:
+      34px 34px,
+      auto;
+    box-shadow: 0 12px 26px rgba(190, 130, 155, 0.24);
+  }
+
+  #dc-titulo {
+    margin: 0;
+    font-size: 11cqw;
+    line-height: 1.1;
+    font-weight: 400;
+    color: #ffffff;
+    text-shadow: 0 2px 6px rgba(160, 95, 120, 0.28);
+  }
+
+  #dc-pin {
+    display: block;
+    width: 8.5cqw;
+    height: auto;
+    margin: 2.4cqw auto 0;
+  }
+
+  /* Sin versalitas ni tracking: esta tipografía redondeada no los tolera y
+     el bloque se lee mejor en caja normal. */
+  #dc-salon {
+    margin: 2.4cqw 0 0;
+    font-size: 6.4cqw;
+    line-height: 1.4;
+    font-weight: 400;
+    color: #ffffff;
+  }
+
+  #dc-direccion {
+    margin: 1.6cqw 0 0;
+    font-size: 6cqw;
+    line-height: 1.35;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.95);
+  }
+
+  #dc-hora {
+    margin: 1.6cqw 0 0;
+    font-size: 6.2cqw;
+    line-height: 1.3;
+    font-weight: 400;
+    color: #ffffff;
+  }
+
+  #dc-boton {
+    display: inline-block;
+    margin-top: 3.4cqw;
+    padding: 2.2cqw 6cqw;
+    border-radius: 999px;
+    /* el blanco del botón, también como imagen */
+    background-image: linear-gradient(#ffffff, #ffffff);
+    color: var(--fucsia-texto);
+    font-size: 5.4cqw;
+    font-weight: 400;
+    line-height: 1.2;
+    text-decoration: none;
+    box-shadow: 0 3px 10px rgba(160, 95, 120, 0.3);
+    transition:
+      transform 0.2s ease,
+      opacity 0.2s ease;
+  }
+
+  #dc-boton:hover {
+    opacity: 0.92;
+  }
+
+  #dc-boton:active {
+    transform: scale(0.96);
+  }
+
+  /* ── Flores de la izquierda ── */
+  #dc-flor {
+    position: absolute;
+    top: 4cqw;
+    left: -10cqw;
+    width: 36cqw;
+    z-index: 3;
+    pointer-events: none;
+  }
+
+  #dc-flor img {
+    width: 100%;
+    height: auto;
+  }
+
+  /* ═══════ ARCO CREMA (por delante del rosa) ═══════ */
+  #cf-arco {
+    position: relative;
+    z-index: 2;
+    /* arranca pisando la parte baja del arco rosa, ya sin tapar el botón */
+    margin: 110cqw 0 0 -6cqw;
+    width: 78cqw;
+    padding: 20cqw 7cqw 9cqw;
+    text-align: center;
+    border-radius: 39cqw 39cqw 5cqw 5cqw / 34cqw 34cqw 5cqw 5cqw;
+    /* el mismo crema de las otras tarjetas, como imagen */
+    background-image: linear-gradient(#fdf3f1, #fdf3f1);
+    border: 1px solid #f0d7d6;
+    box-shadow: 0 10px 24px rgba(190, 130, 155, 0.16);
+  }
+
+  /* el pespunte del marco, siguiendo la misma cúpula */
+  #cf-arco::before {
+    content: "";
+    position: absolute;
+    inset: 2cqw;
+    border: 1px dashed #e9c3c4;
+    border-radius: 37cqw 37cqw 3.4cqw 3.4cqw / 32cqw 32cqw 3.4cqw 3.4cqw;
+    pointer-events: none;
+  }
+
+  #cf-titulo {
+    position: relative;
+    z-index: 2;
+    margin: 0;
+    font-size: 9.5cqw;
+    line-height: 1.15;
+    font-weight: 400;
+    color: var(--fucsia-texto);
+  }
+
+  /* ── Separador con el corazón ── */
+  #cf-divisor {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2.6cqw;
+    margin-top: 3cqw;
+  }
+
+  /* la línea nace transparente y se va tiñendo hacia el corazón */
+  .cf-div-linea {
+    display: block;
+    width: 14cqw;
+    height: 1px;
+    background-image: linear-gradient(
+      to right,
+      rgba(169, 192, 141, 0),
+      var(--verde-suave)
+    );
+  }
+
+  .cf-div-linea-der {
+    background-image: linear-gradient(
+      to left,
+      rgba(169, 192, 141, 0),
+      var(--verde-suave)
+    );
+  }
+
+  .cf-div-corazon {
+    flex: none;
+    width: 4cqw;
+    height: auto;
+    fill: var(--rosa-bebe);
+  }
+
+  #cf-texto {
+    position: relative;
+    z-index: 2;
+    margin: 3.5cqw auto 0;
+    max-width: 64cqw;
+    font-size: 5.6cqw;
+    line-height: 1.6;
+    font-weight: 400;
+    color: var(--beige-texto);
+  }
+
+  /* ── Botón de WhatsApp ── */
+  #cf-botones {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    /* uno debajo del otro */
+    flex-direction: column;
+    align-items: center;
+    gap: 2.6cqw;
+    margin-top: 4.5cqw;
+  }
+
+  .cf-boton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.6cqw;
+    /* ancho fijo y en una sola línea: la "m" de mami es más ancha que la "p"
+       de papi y sin esto el primer botón se partía en dos renglones */
+    width: 62cqw;
+    white-space: nowrap;
+    padding: 2.4cqw 4.6cqw;
+    border-radius: 999px;
+    /* el rosa del botón, como imagen igual que el resto de los fondos */
+    background-image: linear-gradient(#d9738f, #d9738f);
+    color: #ffffff;
+    font-size: 5cqw;
+    font-weight: 400;
+    line-height: 1.2;
+    text-decoration: none;
+    /* ahora es un <button>: sin su borde ni su fondo de fábrica */
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 3px 8px rgba(190, 130, 155, 0.32);
+    transition:
+      transform 0.2s ease,
+      opacity 0.2s ease;
+  }
+
+  .cf-boton:hover {
+    opacity: 0.92;
+  }
+
+  .cf-boton:active {
+    transform: scale(0.96);
+  }
+
+  .cf-wa {
+    width: 4.4cqw;
+    height: 4.4cqw;
+    fill: #ffffff;
+    flex-shrink: 0;
+  }
+
+  /* ── Acuse: "ya confirmaste" ── */
+  /* Una plaquita blanca con su pespunte, en verde cuando viene y en rosa
+     cuando no puede. Entra creciendo apenas. */
+  #cf-hecho {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2.4cqw;
+    width: 66cqw;
+    margin: 4cqw auto 0;
+    padding: 3cqw 4cqw;
+    background-image: linear-gradient(#ffffff, #ffffff);
+    border: 1px dashed #cfdcbb;
+    border-radius: 4cqw;
+    box-shadow: 0 2px 8px rgba(200, 165, 155, 0.14);
+    color: var(--verde-texto);
+    opacity: 0;
+    transform: scale(0.92);
+    transition:
+      opacity 0.4s ease,
+      transform 0.5s cubic-bezier(0.22, 1.2, 0.36, 1);
+  }
+
+  #cf-hecho[hidden] {
+    display: none;
+  }
+
+  #cf-hecho.cf-hecho-visible {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  /* cuando avisó que no puede venir, el mismo cartel en rosa */
+  #cf-hecho.cf-hecho-no {
+    border-color: #e9c3c4;
+    color: var(--fucsia-texto);
+  }
+
+  #cf-hecho-icono {
+    flex: none;
+    width: 6.4cqw;
+    height: 6.4cqw;
+  }
+
+  #cf-hecho-texto {
+    margin: 0;
+    font-size: 4.6cqw;
+    line-height: 1.35;
+    font-weight: 400;
+    color: inherit;
+  }
+
+  /* ═══════ MODAL DE CONFIRMACIÓN ═══════ */
+  #cf-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* el scroll vive acá y no en la tarjeta: si la tarjeta lo llevara,
+       recortaría el moño que le sobresale por arriba. Y se queda acá: sin
+       overscroll-behavior, al llegar al final el gesto se lo lleva la
+       invitación de atrás. */
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    /* aire arriba para el moño */
+    padding: 15vw 5vw 8vw;
+  }
+
+  #cf-modal[hidden] {
+    display: none;
+  }
+
+  /* el velo rosado detrás */
+  #cf-fondo {
+    position: absolute;
+    inset: 0;
+    /* apenas un velo: la invitación se sigue viendo detrás, solo que no se
+       puede mover. El touch-action frena el gesto de arrastre sobre el velo,
+       que si no se lo lleva la página de atrás. */
+    background-image: linear-gradient(
+      rgba(150, 105, 120, 0.22),
+      rgba(150, 105, 120, 0.22)
+    );
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    touch-action: none;
+    opacity: 0;
+    transition: opacity 0.35s ease;
+  }
+
+  /* ── La tarjeta del modal ── */
+  /* Container propio: así los tamaños de adentro siguen midiéndose en cqw,
+     como en el resto de la invitación. */
+  #cf-caja {
+    position: relative;
+    width: min(88vw, 360px);
+    /* sin overflow propio a propósito: el moño le sobresale por arriba */
+    container-type: inline-size;
+    padding: 13cqw 7cqw 9cqw;
+    text-align: center;
+    background-image: radial-gradient(
+        circle,
+        rgba(233, 195, 196, 0.5) 1px,
+        transparent 1.3px
+      ),
+      linear-gradient(#fdf3f1, #fdf3f1);
+    background-size:
+      22px 22px,
+      auto;
+    border: 1px solid #f0d7d6;
+    border-radius: 9cqw;
+    box-shadow: 0 18px 40px rgba(150, 105, 120, 0.3);
+    opacity: 0;
+    transform: translateY(14px) scale(0.94);
+    transition:
+      opacity 0.35s ease,
+      transform 0.45s cubic-bezier(0.22, 1.2, 0.36, 1);
+  }
+
+  /* el pespunte, como en las demás tarjetas */
+  #cf-caja::before {
+    content: "";
+    position: absolute;
+    inset: 2cqw;
+    border: 1px dashed #e9c3c4;
+    border-radius: 7.4cqw;
+    pointer-events: none;
+  }
+
+  /* abierto: el velo y la tarjeta entran */
+  #cf-modal.cf-abierto #cf-fondo {
+    opacity: 1;
+  }
+
+  #cf-modal.cf-abierto #cf-caja {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  /* el moño, montado sobre el borde de arriba */
+  #cf-modal-mono {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 52cqw;
+    height: auto;
+    transform: translate(-50%, -52%);
+    z-index: 3;
+  }
+
+  /* ── Cerrar ── */
+  #cf-cerrar {
+    position: absolute;
+    top: 3.5cqw;
+    right: 3.5cqw;
+    z-index: 4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 8cqw;
+    height: 8cqw;
+    padding: 0;
+    border: 1px solid #f0d7d6;
+    border-radius: 999px;
+    background-image: linear-gradient(#ffffff, #ffffff);
+    color: var(--fucsia-texto);
+    cursor: pointer;
+    transition: transform 0.2s ease;
+  }
+
+  #cf-cerrar svg {
+    width: 4cqw;
+    height: 4cqw;
+  }
+
+  #cf-cerrar:active {
+    transform: scale(0.92);
+  }
+
+  /* ── Textos del modal ── */
+  #cf-modal-titulo {
+    position: relative;
+    z-index: 2;
+    margin: 0;
+    font-size: 10cqw;
+    line-height: 1.15;
+    font-weight: 400;
+    color: var(--fucsia-texto);
+  }
+
+  /* el nombre sobre su placa blanca, igual que en la tarjeta del pase */
+  #cf-modal-pase {
+    position: relative;
+    z-index: 2;
+    margin: 4cqw 0 0;
+    padding: 3.4cqw 4cqw;
+    background-image: linear-gradient(#ffffff, #ffffff);
+    border: 1px dashed #e9c3c4;
+    border-radius: 4cqw;
+    box-shadow: 0 2px 8px rgba(200, 165, 155, 0.14);
+  }
+
+  /* si el invitado no tiene nombre cargado, la placa no se muestra */
+  #cf-modal-pase[hidden] {
+    display: none;
+  }
+
+  #cf-modal-nombre {
+    margin: 0;
+    font-size: 8.4cqw;
+    line-height: 1.25;
+    font-weight: 400;
+    color: var(--fucsia-texto);
+  }
+
+  #cf-modal-texto {
+    position: relative;
+    z-index: 2;
+    margin: 4cqw auto 0;
+    max-width: 76cqw;
+    font-size: 6.4cqw;
+    line-height: 1.5;
+    font-weight: 400;
+    color: var(--beige-texto);
+  }
+
+  /* ── Las dos opciones ── */
+  #cf-modal-botones {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3cqw;
+    margin-top: 6cqw;
+  }
+
+  .cf-opcion {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2cqw;
+    width: 72cqw;
+    padding: 3cqw 4cqw;
+    border-radius: 999px;
+    font-size: 6cqw;
+    font-weight: 400;
+    line-height: 1.2;
+    text-decoration: none;
+    /* son <button>: sin el estilo de fábrica */
+    appearance: none;
+    cursor: pointer;
+    transition:
+      transform 0.2s ease,
+      opacity 0.2s ease;
+  }
+
+  .cf-opcion:active {
+    transform: scale(0.96);
+  }
+
+  /* el sí, lleno; el no, apenas dibujado */
+  .cf-opcion-si {
+    background-image: linear-gradient(#d9738f, #d9738f);
+    color: #ffffff;
+    border: 1px solid #d9738f;
+    box-shadow: 0 4px 10px rgba(190, 130, 155, 0.32);
+  }
+
+  .cf-opcion-no {
+    background-image: linear-gradient(#ffffff, #ffffff);
+    color: var(--beige-texto);
+    border: 1px solid #e9c3c4;
+  }
+
+  .cf-tilde {
+    flex: none;
+    width: 5cqw;
+    height: 5cqw;
+  }
+
+  /* ── Pato de la esquina ── */
+  #dc-mariposa {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 34cqw;
+    z-index: 4;
+    pointer-events: none;
+    filter: drop-shadow(0 5px 12px rgba(150, 110, 130, 0.24));
+  }
+
+  /* El volteo va en el <img>, no en el contenedor:
+     GSAP anima el contenedor y pisaría el transform. */
+  #dc-mariposa img {
+    width: 100%;
+    height: auto;
+    transform: scaleX(-1);
+  }
+</style>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+  gsap.registerPlugin(ScrollTrigger);
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const itemsArco = [
+      "#dc-titulo",
+      "#dc-pin",
+      "#dc-salon",
+      "#dc-direccion",
+      "#dc-hora",
+      "#dc-boton",
+    ];
+    const itemsConf = ["#cf-titulo", "#cf-divisor", "#cf-texto", "#cf-botones"];
+
+    // ── Modal de confirmación ──────────────────────────────────
+    // El nombre no se escribe dos veces: se toma de la tarjeta del pase, así
+    // cuando el sistema de invitados la complete, el modal la sigue sola.
+    const modal = document.getElementById("cf-modal");
+    const abrir = document.getElementById("cf-abrir");
+    const cerrar = document.getElementById("cf-cerrar");
+    const fondo = document.getElementById("cf-fondo");
+    const pase = document.getElementById("cf-modal-pase");
+    const nombreEl = document.getElementById("cf-modal-nombre");
+    const btnSi = document.getElementById("cf-si");
+    const btnNo = document.getElementById("cf-no");
+
+    const hecho = document.getElementById("cf-hecho");
+    const hechoTexto = document.getElementById("cf-hecho-texto");
+
+    if (modal && abrir && cerrar && fondo && pase && nombreEl && btnSi && btnNo) {
+      // ── Bloqueo del fondo ──
+      // Solo overflow, sin tocar la posición del body: el layout pinta el
+      // fondo de la invitación con un body::before fijo, y al volver el body
+      // position:fixed se pierde y la pantalla queda de un color plano.
+      // El resto del gesto lo frenan el touch-action del velo y el
+      // overscroll-behavior del modal.
+      const bloquearFondo = () => {
+        document.documentElement.style.overflow = "hidden";
+        document.body.style.overflow = "hidden";
+      };
+
+      const soltarFondo = () => {
+        document.documentElement.style.overflow = "";
+        document.body.style.overflow = "";
+      };
+
+      // ── Acuse de la respuesta ──
+      // Queda guardado en el navegador para que siga ahí si vuelve a abrir
+      // la invitación. Si el navegador lo tiene bloqueado, no pasa nada: el
+      // cartel se ve igual hasta que recargue.
+      const CLAVE = "gansa-verde-asistencia";
+
+      const leerRespuesta = () => {
+        try {
+          return window.localStorage.getItem(CLAVE);
+        } catch {
+          return null;
+        }
+      };
+
+      const guardarRespuesta = (valor: string) => {
+        try {
+          window.localStorage.setItem(CLAVE, valor);
+        } catch {
+          /* navegador sin almacenamiento: se muestra igual, sin guardar */
+        }
+      };
+
+      const mostrarAcuse = (valor: string | null, animar: boolean) => {
+        if (!hecho || !hechoTexto || !valor) return;
+        hechoTexto.textContent =
+          valor === "si"
+            ? "¡Gracias! Tu asistencia quedó confirmada."
+            : "Gracias por avisarnos. ¡Te vamos a extrañar!";
+        hecho.classList.toggle("cf-hecho-no", valor === "no");
+        hecho.hidden = false;
+        if (animar) {
+          requestAnimationFrame(() =>
+            hecho.classList.add("cf-hecho-visible"),
+          );
+        } else {
+          hecho.classList.add("cf-hecho-visible");
+        }
+      };
+
+      // al abrir la página, si ya contestó antes, el cartel ya está puesto
+      mostrarAcuse(leerRespuesta(), false);
+
+      // Único lugar donde se decide qué pasa al contestar. Hoy solo guarda y
+      // muestra el acuse; acá adentro va a entrar el envío a la base de
+      // datos, junto con nombreInvitado() para saber quién contestó.
+      const responder = (valor: string) => {
+        guardarRespuesta(valor);
+        mostrarAcuse(valor, true);
+        window.setTimeout(cerrarModal, 220);
+      };
+
+      const nombreInvitado = () =>
+        (document.getElementById("in-nombre")?.textContent ?? "").trim();
+
+      const abrirModal = () => {
+        const nombre = nombreInvitado();
+        nombreEl.textContent = nombre;
+        pase.hidden = nombre === "";
+
+        modal.hidden = false;
+        // un cuadro de espera para que la transición arranque desde el
+        // estado cerrado y no aparezca de golpe
+        requestAnimationFrame(() => modal.classList.add("cf-abierto"));
+        bloquearFondo();
+        cerrar.focus();
+      };
+
+      const cerrarModal = () => {
+        modal.classList.remove("cf-abierto");
+        soltarFondo();
+        // espera a que termine el fundido para sacarlo del árbol
+        window.setTimeout(() => {
+          modal.hidden = true;
+        }, 350);
+        abrir.focus();
+      };
+
+      abrir.addEventListener("click", abrirModal);
+      cerrar.addEventListener("click", cerrarModal);
+      fondo.addEventListener("click", cerrarModal);
+      // al elegir queda el acuse y el modal se cierra solo
+      btnSi.addEventListener("click", () => responder("si"));
+      btnNo.addEventListener("click", () => responder("no"));
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && !modal.hidden) cerrarModal();
+      });
+    }
+
+    const inicial = () => {
+      gsap.killTweensOf("#dc-mariposa");
+      gsap.set("#dc-arco", { opacity: 0, y: 30, scale: 0.96 });
+      gsap.set("#cf-arco", { opacity: 0, y: 30, scale: 0.96 });
+      gsap.set("#dc-flor", { opacity: 0, x: "-45%" });
+      gsap.set("#dc-mariposa", { opacity: 0, x: "40%", y: "15%", rotation: 0 });
+      gsap.set([...itemsArco, ...itemsConf], { opacity: 0, y: 14 });
+    };
+
+    inicial();
+
+    ScrollTrigger.create({
+      trigger: "#ceremonia-section",
+      start: "top 80%",
+      onEnter: () => {
+        const tl = gsap.timeline();
+        tl.to(
+          "#dc-arco",
+          { opacity: 1, y: 0, scale: 1, duration: 1.2, ease: "back.out(1.2)" },
+          0,
+        )
+          .to(
+            "#dc-flor",
+            { opacity: 1, x: 0, duration: 1.4, ease: "power2.out" },
+            0.2,
+          )
+          .to(
+            itemsArco,
+            {
+              opacity: 1,
+              y: 0,
+              duration: 0.9,
+              stagger: 0.12,
+              ease: "power2.out",
+            },
+            0.35,
+          )
+          .to(
+            "#cf-arco",
+            { opacity: 1, y: 0, scale: 1, duration: 1.2, ease: "back.out(1.2)" },
+            0.6,
+          )
+          .to(
+            "#dc-mariposa",
+            { opacity: 1, x: 0, y: 0, duration: 1.4, ease: "power2.out" },
+            0.8,
+          )
+          .to(
+            itemsConf,
+            {
+              opacity: 1,
+              y: 0,
+              duration: 0.9,
+              stagger: 0.13,
+              ease: "power2.out",
+            },
+            0.9,
+          )
+          // el pato queda meciéndose despacio
+          .add(() => {
+            gsap.to("#dc-mariposa", {
+              y: -7,
+              rotation: 4,
+              duration: 3.2,
+              repeat: -1,
+              yoyo: true,
+              ease: "sine.inOut",
+            });
+          }, 2.4);
+      },
+      onLeaveBack: inicial,
+    });
+  });
+</script>

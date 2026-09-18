@@ -1,0 +1,60 @@
+@import "tailwindcss";
+
+/* ═══════ PALETA DE LA INVITACIÓN ═══════
+   Vive acá y solo acá: los componentes la usan con var(), así un cambio de
+   color se hace en un solo lugar y no queda ningún tono suelto. */
+:root {
+  --rosa-bebe: #f7c6ce;
+  --amarillo-pastel: #f7e3a1;
+  --blanco: #ffffff;
+  --verde-suave: #a9c08d;
+  --beige-nude: #c9a98a;
+  --fucsia-suave: #d9738f;
+
+  /* versiones oscurecidas, para texto que tiene que leerse bien */
+  --fucsia-texto: #c05a78;
+  --beige-texto: #96745a;
+  --verde-texto: #6f8a4e;
+}
+
+/* Fuente personalizada Selna (el archivo tiene un espacio en el nombre,
+   por eso la URL va con %20). La usa el nombre de la bebé. */
+@font-face {
+  font-family: 'Selna';
+  src: url('/fonts/Selna%20Regular.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+.font-selna {
+  font-family: 'Selna', cursive !important;
+}
+
+/* Fuente personalizada HalfTerm, servida desde el propio sitio */
+@font-face {
+  font-family: 'HalfTerm';
+  src: url('/fonts/HalfTerm.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+.font-halfterm {
+  font-family: 'HalfTerm', cursive !important;
+}
+
+/* Nombres de los padres y títulos en script */
+.font-great-vibes {
+  font-family: 'Great Vibes', cursive !important;
+}
+
+/* Instrucción de la portada */
+.font-crimson {
+  font-family: 'Crimson Text', serif !important;
+}
+
+/* Fuente principal de la invitación: versalitas y textos */
+.font-cinzel {
+  font-family: 'Cinzel', serif !important;
+}

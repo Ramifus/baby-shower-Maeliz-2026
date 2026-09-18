@@ -1,0 +1,537 @@
+---
+// src/components/DireccionCeremonia.astro
+// Recepción + Confirmar asistencia en un solo bloque: el arco rosa arriba a la
+// derecha y, montado por delante, el arco crema con la confirmación.
+// Misma estructura de siempre, con la paleta y la tipografía del resto de la
+// invitación: el arco crema lleva el pespunte de las otras tarjetas.
+
+const lugar = {
+  salon: "Salón de Eventos",
+  salon2: '"Keilani"',
+  direccion: "Calle Cívica, Cobija - Pando",
+  hora: "14:30 hrs.",
+};
+
+// El punto exacto que mandó el cliente, abierto en Google Maps: las
+// coordenadas van tal cual, así el botón cae en el salón y no en una
+// búsqueda por nombre.
+const mapa =
+  "https://www.google.com/maps/search/?api=1&query=-11.021406,-68.758619";
+
+const confirmacion = {
+  limite: "25 de agosto",
+  mensaje:
+    "¡Hola! Confirmo mi asistencia al Baby Shower de Sienna Diana. Nos vemos el sábado 29 de agosto.",
+  // Bolivia (+591)
+  mama: { nombre: "Confirmar con mami", telefono: "59170732122" },
+  papa: { nombre: "Confirmar con papi", telefono: "59177647481" },
+};
+
+const linkMama = `https://wa.me/${confirmacion.mama.telefono}?text=${encodeURIComponent(confirmacion.mensaje)}`;
+const linkPapa = `https://wa.me/${confirmacion.papa.telefono}?text=${encodeURIComponent(confirmacion.mensaje)}`;
+
+// El mismo corazoncito que usan los demás bloques.
+const CORAZON =
+  "M10 17 C 1 9.5, 0.5 4, 4.5 1.8 C 7.2 0.3, 9 2.5, 10 4.6 C 11 2.5, 12.8 0.3, 15.5 1.8 C 19.5 4, 19 9.5, 10 17 Z";
+---
+
+<section id="ceremonia-section">
+  <div id="dc-wrap">
+    <!-- ═══════ ARCO ROSA — RECEPCIÓN ═══════ -->
+    <div id="dc-arco">
+      <h3 id="dc-titulo" class="font-halfterm">Recepción</h3>
+
+      <!-- Pin de ubicación -->
+      <svg id="dc-pin" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path
+          d="M12 2.6c-3.6 0-6.5 2.9-6.5 6.5 0 4.6 5.7 10.4 6 10.6.3.3.7.3 1 0 .3-.3 6-6 6-10.6 0-3.6-2.9-6.5-6.5-6.5Zm0 9.2a2.7 2.7 0 1 1 0-5.4 2.7 2.7 0 0 1 0 5.4Z"
+          fill="#ffffff"></path>
+        <ellipse
+          cx="12"
+          cy="20.6"
+          rx="4.6"
+          ry="1.5"
+          stroke="#ffffff"
+          stroke-width="1.4"></ellipse>
+      </svg>
+
+      <p id="dc-salon" class="font-halfterm">
+        {lugar.salon}<br />{lugar.salon2}
+      </p>
+
+      <p id="dc-direccion" class="font-halfterm">{lugar.direccion}</p>
+
+      <p id="dc-hora" class="font-halfterm">{lugar.hora}</p>
+
+      <a
+        id="dc-boton"
+        class="font-halfterm"
+        href={mapa}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Ver ubicación
+      </a>
+    </div>
+
+    <!-- ═══════ FLORES (izquierda) ═══════ -->
+    <div id="dc-flor"><img src="/imagenes/lateral2.png" alt="" /></div>
+
+    <!-- ═══════ ARCO CREMA — CONFIRMAR ASISTENCIA ═══════ -->
+    <div id="cf-arco">
+      <h3 id="cf-titulo" class="font-halfterm">
+        Confirmar<br />Asistencia
+      </h3>
+
+      <!-- el mismo separador que la fecha: dos líneas que se desvanecen y
+           el corazón al centro -->
+      <div id="cf-divisor">
+        <span class="cf-div-linea"></span>
+        <svg class="cf-div-corazon" viewBox="0 0 20 18" aria-hidden="true">
+          <path d={CORAZON}></path>
+        </svg>
+        <span class="cf-div-linea cf-div-linea-der"></span>
+      </div>
+
+      <p id="cf-texto" class="font-halfterm">
+        Nos encantará saber que nos acompañarás. Permítenos preparar los
+        detalles confirmando tu asistencia.
+      </p>
+
+      <p id="cf-limite" class="font-halfterm">
+        Confirmar hasta el {confirmacion.limite}
+      </p>
+
+      <div id="cf-botones">
+        <a
+          class="cf-boton font-halfterm"
+          href={linkMama}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <svg class="cf-wa" viewBox="0 0 24 24" aria-hidden="true">
+            <path
+              d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.7 4.8-1.3A10 10 0 1 0 12 2Zm5.6 14.1c-.2.7-1.2 1.3-1.9 1.4-.5.1-1.1.2-3.2-.7-2.7-1.1-4.4-3.9-4.5-4-.1-.2-1.1-1.4-1.1-2.7s.7-1.9.9-2.2c.2-.2.5-.3.6-.3h.5c.2 0 .4 0 .6.4l.8 2c.1.2 0 .4 0 .5l-.4.5-.3.3c-.1.1-.2.3 0 .5.2.4.8 1.3 1.7 2.1 1.1 1 2 1.3 2.3 1.4.2.1.4.1.5-.1l.8-.9c.2-.2.3-.2.5-.1l2 .9c.2.1.4.2.4.3.1.2.1.7-.2 1.7Z"
+            ></path>
+          </svg>
+          {confirmacion.mama.nombre}
+        </a>
+
+        <a
+          class="cf-boton font-halfterm"
+          href={linkPapa}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <svg class="cf-wa" viewBox="0 0 24 24" aria-hidden="true">
+            <path
+              d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.7 4.8-1.3A10 10 0 1 0 12 2Zm5.6 14.1c-.2.7-1.2 1.3-1.9 1.4-.5.1-1.1.2-3.2-.7-2.7-1.1-4.4-3.9-4.5-4-.1-.2-1.1-1.4-1.1-2.7s.7-1.9.9-2.2c.2-.2.5-.3.6-.3h.5c.2 0 .4 0 .6.4l.8 2c.1.2 0 .4 0 .5l-.4.5-.3.3c-.1.1-.2.3 0 .5.2.4.8 1.3 1.7 2.1 1.1 1 2 1.3 2.3 1.4.2.1.4.1.5-.1l.8-.9c.2-.2.3-.2.5-.1l2 .9c.2.1.4.2.4.3.1.2.1.7-.2 1.7Z"
+            ></path>
+          </svg>
+          {confirmacion.papa.nombre}
+        </a>
+      </div>
+    </div>
+
+    <!-- ═══════ PATO (esquina inferior derecha) ═══════ -->
+    <div id="dc-mariposa"><img src="/imagenes/pato.png" alt="" /></div>
+  </div>
+</section>
+
+<style>
+  #ceremonia-section {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    overflow-x: hidden;
+    background: transparent;
+    padding: 0.5rem 0 1.5rem;
+  }
+
+  #dc-wrap {
+    position: relative;
+    width: min(100vw, 480px);
+    container-type: inline-size;
+  }
+
+  #dc-wrap img {
+    display: block;
+    user-select: none;
+    -webkit-user-drag: none;
+    pointer-events: none;
+  }
+
+  /* ═══════ ARCO ROSA ═══════ */
+  #dc-arco {
+    position: absolute;
+    top: 0;
+    left: 24cqw;
+    width: 80cqw;
+    /* más largo, para que el botón quede bien arriba del arco crema */
+    height: 120cqw;
+    z-index: 1;
+    padding: 14cqw 8cqw 0;
+    text-align: center;
+    /* cúpula semicircular arriba, esquinas suaves abajo */
+    border-radius: 40cqw 40cqw 5cqw 5cqw / 38cqw 38cqw 5cqw 5cqw;
+    /* el rosa va como imagen, igual que los otros fondos: el modo oscuro
+       forzado oscurece colores, pero respeta las imágenes. Encima, la
+       textura de puntitos. */
+    background-image: radial-gradient(
+        circle,
+        rgba(255, 255, 255, 0.2) 1px,
+        transparent 1.3px
+      ),
+      linear-gradient(#e79fb5, #e79fb5);
+    background-size:
+      34px 34px,
+      auto;
+    box-shadow: 0 12px 26px rgba(190, 130, 155, 0.24);
+  }
+
+  #dc-titulo {
+    margin: 0;
+    font-size: 11cqw;
+    line-height: 1.1;
+    font-weight: 400;
+    color: #ffffff;
+    text-shadow: 0 2px 6px rgba(160, 95, 120, 0.28);
+  }
+
+  #dc-pin {
+    display: block;
+    width: 8.5cqw;
+    height: auto;
+    margin: 2.4cqw auto 0;
+  }
+
+  /* Sin versalitas ni tracking: esta tipografía redondeada no los tolera y
+     el bloque se lee mejor en caja normal. */
+  #dc-salon {
+    margin: 2.4cqw 0 0;
+    font-size: 6.4cqw;
+    line-height: 1.4;
+    font-weight: 400;
+    color: #ffffff;
+  }
+
+  #dc-direccion {
+    margin: 1.6cqw 0 0;
+    font-size: 6cqw;
+    line-height: 1.35;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.95);
+  }
+
+  #dc-hora {
+    margin: 1.6cqw 0 0;
+    font-size: 6.2cqw;
+    line-height: 1.3;
+    font-weight: 400;
+    color: #ffffff;
+  }
+
+  #dc-boton {
+    display: inline-block;
+    margin-top: 3.4cqw;
+    padding: 2.2cqw 6cqw;
+    border-radius: 999px;
+    /* el blanco del botón, también como imagen */
+    background-image: linear-gradient(#ffffff, #ffffff);
+    color: var(--fucsia-texto);
+    font-size: 5.4cqw;
+    font-weight: 400;
+    line-height: 1.2;
+    text-decoration: none;
+    box-shadow: 0 3px 10px rgba(160, 95, 120, 0.3);
+    transition:
+      transform 0.2s ease,
+      opacity 0.2s ease;
+  }
+
+  #dc-boton:hover {
+    opacity: 0.92;
+  }
+
+  #dc-boton:active {
+    transform: scale(0.96);
+  }
+
+  /* ── Flores de la izquierda ── */
+  #dc-flor {
+    position: absolute;
+    top: 4cqw;
+    left: -10cqw;
+    width: 36cqw;
+    z-index: 3;
+    pointer-events: none;
+  }
+
+  #dc-flor img {
+    width: 100%;
+    height: auto;
+  }
+
+  /* ═══════ ARCO CREMA (por delante del rosa) ═══════ */
+  #cf-arco {
+    position: relative;
+    z-index: 2;
+    /* arranca pisando la parte baja del arco rosa, ya sin tapar el botón */
+    margin: 110cqw 0 0 -6cqw;
+    width: 78cqw;
+    padding: 20cqw 7cqw 9cqw;
+    text-align: center;
+    border-radius: 39cqw 39cqw 5cqw 5cqw / 34cqw 34cqw 5cqw 5cqw;
+    /* el mismo crema de las otras tarjetas, como imagen */
+    background-image: linear-gradient(#fdf3f1, #fdf3f1);
+    border: 1px solid #f0d7d6;
+    box-shadow: 0 10px 24px rgba(190, 130, 155, 0.16);
+  }
+
+  /* el pespunte del marco, siguiendo la misma cúpula */
+  #cf-arco::before {
+    content: "";
+    position: absolute;
+    inset: 2cqw;
+    border: 1px dashed #e9c3c4;
+    border-radius: 37cqw 37cqw 3.4cqw 3.4cqw / 32cqw 32cqw 3.4cqw 3.4cqw;
+    pointer-events: none;
+  }
+
+  #cf-titulo {
+    position: relative;
+    z-index: 2;
+    margin: 0;
+    font-size: 9.5cqw;
+    line-height: 1.15;
+    font-weight: 400;
+    color: var(--fucsia-texto);
+  }
+
+  /* ── Separador con el corazón ── */
+  #cf-divisor {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2.6cqw;
+    margin-top: 3cqw;
+  }
+
+  /* la línea nace transparente y se va tiñendo hacia el corazón */
+  .cf-div-linea {
+    display: block;
+    width: 14cqw;
+    height: 1px;
+    background-image: linear-gradient(
+      to right,
+      rgba(169, 192, 141, 0),
+      var(--verde-suave)
+    );
+  }
+
+  .cf-div-linea-der {
+    background-image: linear-gradient(
+      to left,
+      rgba(169, 192, 141, 0),
+      var(--verde-suave)
+    );
+  }
+
+  .cf-div-corazon {
+    flex: none;
+    width: 4cqw;
+    height: auto;
+    fill: var(--rosa-bebe);
+  }
+
+  #cf-texto {
+    position: relative;
+    z-index: 2;
+    margin: 3.5cqw auto 0;
+    max-width: 64cqw;
+    font-size: 5.6cqw;
+    line-height: 1.6;
+    font-weight: 400;
+    color: var(--beige-texto);
+  }
+
+  #cf-limite {
+    position: relative;
+    z-index: 2;
+    margin: 3cqw 0 0;
+    font-size: 5.6cqw;
+    line-height: 1.4;
+    font-weight: 400;
+    color: var(--verde-texto);
+  }
+
+  /* ── Botones de WhatsApp ── */
+  #cf-botones {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    /* uno debajo del otro */
+    flex-direction: column;
+    align-items: center;
+    gap: 2.6cqw;
+    margin-top: 4.5cqw;
+  }
+
+  .cf-boton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.6cqw;
+    /* ancho fijo y en una sola línea: la "m" de mami es más ancha que la "p"
+       de papi y sin esto el primer botón se partía en dos renglones */
+    width: 62cqw;
+    white-space: nowrap;
+    padding: 2.4cqw 4.6cqw;
+    border-radius: 999px;
+    /* el rosa del botón, como imagen igual que el resto de los fondos */
+    background-image: linear-gradient(#d9738f, #d9738f);
+    color: #ffffff;
+    font-size: 5cqw;
+    font-weight: 400;
+    line-height: 1.2;
+    text-decoration: none;
+    box-shadow: 0 3px 8px rgba(190, 130, 155, 0.32);
+    transition:
+      transform 0.2s ease,
+      opacity 0.2s ease;
+  }
+
+  .cf-boton:hover {
+    opacity: 0.92;
+  }
+
+  .cf-boton:active {
+    transform: scale(0.96);
+  }
+
+  .cf-wa {
+    width: 4.4cqw;
+    height: 4.4cqw;
+    fill: #ffffff;
+    flex-shrink: 0;
+  }
+
+  /* ── Pato de la esquina ── */
+  #dc-mariposa {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 34cqw;
+    z-index: 4;
+    pointer-events: none;
+    filter: drop-shadow(0 5px 12px rgba(150, 110, 130, 0.24));
+  }
+
+  /* El volteo va en el <img>, no en el contenedor:
+     GSAP anima el contenedor y pisaría el transform. */
+  #dc-mariposa img {
+    width: 100%;
+    height: auto;
+    transform: scaleX(-1);
+  }
+</style>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+  gsap.registerPlugin(ScrollTrigger);
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const itemsArco = [
+      "#dc-titulo",
+      "#dc-pin",
+      "#dc-salon",
+      "#dc-direccion",
+      "#dc-hora",
+      "#dc-boton",
+    ];
+    const itemsConf = [
+      "#cf-titulo",
+      "#cf-divisor",
+      "#cf-texto",
+      "#cf-limite",
+      "#cf-botones",
+    ];
+
+    const inicial = () => {
+      gsap.killTweensOf("#dc-mariposa");
+      gsap.set("#dc-arco", { opacity: 0, y: 30, scale: 0.96 });
+      gsap.set("#cf-arco", { opacity: 0, y: 30, scale: 0.96 });
+      gsap.set("#dc-flor", { opacity: 0, x: "-45%" });
+      gsap.set("#dc-mariposa", { opacity: 0, x: "40%", y: "15%", rotation: 0 });
+      gsap.set([...itemsArco, ...itemsConf], { opacity: 0, y: 14 });
+    };
+
+    inicial();
+
+    ScrollTrigger.create({
+      trigger: "#ceremonia-section",
+      start: "top 80%",
+      onEnter: () => {
+        const tl = gsap.timeline();
+        tl.to(
+          "#dc-arco",
+          { opacity: 1, y: 0, scale: 1, duration: 1.2, ease: "back.out(1.2)" },
+          0,
+        )
+          .to(
+            "#dc-flor",
+            { opacity: 1, x: 0, duration: 1.4, ease: "power2.out" },
+            0.2,
+          )
+          .to(
+            itemsArco,
+            {
+              opacity: 1,
+              y: 0,
+              duration: 0.9,
+              stagger: 0.12,
+              ease: "power2.out",
+            },
+            0.35,
+          )
+          .to(
+            "#cf-arco",
+            { opacity: 1, y: 0, scale: 1, duration: 1.2, ease: "back.out(1.2)" },
+            0.6,
+          )
+          .to(
+            "#dc-mariposa",
+            { opacity: 1, x: 0, y: 0, duration: 1.4, ease: "power2.out" },
+            0.8,
+          )
+          .to(
+            itemsConf,
+            {
+              opacity: 1,
+              y: 0,
+              duration: 0.9,
+              stagger: 0.13,
+              ease: "power2.out",
+            },
+            0.9,
+          )
+          // el pato queda meciéndose despacio
+          .add(() => {
+            gsap.to("#dc-mariposa", {
+              y: -7,
+              rotation: 4,
+              duration: 3.2,
+              repeat: -1,
+              yoyo: true,
+              ease: "sine.inOut",
+            });
+          }, 2.4);
+      },
+      onLeaveBack: inicial,
+    });
+  });
+</script>

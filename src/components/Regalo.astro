@@ -1,0 +1,385 @@
+---
+// src/components/Regalo.astro
+// Cierre de la invitación: "Regalo — lluvia de sobres" con la fecha y
+// "¡Guarda la fecha!". El carrito con flores cierra abajo, el sobre rosa va
+// arriba a la derecha y el elefante cierra la esquina.
+// Lienzo de proporción fija: todo en cqw, igual en celular y en escritorio.
+
+const fecha = {
+  mes: "Agosto",
+  numero: "29",
+};
+---
+
+<section id="regalo-section">
+  <div id="rg-wrap">
+    <!-- ═══════ CORAZÓN (arriba izquierda) ═══════ -->
+    <img id="rg-corazon" src="/imagenes/corazon.png" alt="" />
+
+    <!-- ═══════ SOBRE CON FLORES (arriba derecha) ═══════ -->
+    <img id="rg-carta" src="/imagenes/carta.png" alt="" />
+
+    <!-- ═══════ TÍTULO ═══════ -->
+    <div id="rg-bloque-titulo">
+      <h3 id="rg-titulo" class="font-cinzel">Regalo</h3>
+      <p id="rg-lluvia" class="font-great-vibes">Lluvia de sobres</p>
+    </div>
+
+    <!-- ═══════ FECHA ═══════ -->
+    <p id="rg-mes" class="font-cinzel">{fecha.mes}</p>
+    <p id="rg-numero" class="font-cinzel">{fecha.numero}</p>
+
+    <!-- ═══════ GUARDA LA FECHA ═══════ -->
+    <p id="rg-guarda" class="font-great-vibes">¡Guarda la fecha!</p>
+
+    <!-- ═══════ MARIPOSAS (izquierda, a la altura del número) ═══════ -->
+    <div class="rg-mariposa rg-mariposa-1">
+      <img src="/imagenes/mariposa2.png" alt="" />
+    </div>
+    <div class="rg-mariposa rg-mariposa-2">
+      <img src="/imagenes/mariposa2.png" alt="" />
+    </div>
+    <div class="rg-mariposa rg-mariposa-3">
+      <img src="/imagenes/mariposa2.png" alt="" />
+    </div>
+
+    <!-- ═══════ CARRITO CON FLORES (abajo) ═══════ -->
+    <div id="rg-carrito"><img src="/imagenes/carrito.png" alt="" /></div>
+
+    <!-- ═══════ ELEFANTE (esquina inferior izquierda) ═══════ -->
+    <div id="rg-elefante"><img src="/imagenes/elefante.png" alt="" /></div>
+  </div>
+</section>
+
+<style>
+  #regalo-section {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
+    background: transparent;
+    padding: 1rem 0 0;
+  }
+
+  /* ═══════ LIENZO ═══════ */
+  #rg-wrap {
+    position: relative;
+    width: min(100vw, 480px);
+    /* alto = 1.4 × ancho, o sea 140cqw */
+    aspect-ratio: 100 / 140;
+    container-type: inline-size;
+  }
+
+  #rg-wrap img {
+    display: block;
+    user-select: none;
+    -webkit-user-drag: none;
+    pointer-events: none;
+  }
+
+  /* ── Corazón ── */
+  #rg-corazon {
+    position: absolute;
+    top: 0;
+    left: 1cqw;
+    width: 24cqw;
+    height: auto;
+    z-index: 1;
+  }
+
+  /* ── Sobre con flores ── */
+  #rg-carta {
+    position: absolute;
+    top: 0;
+    right: 1cqw;
+    width: 31cqw;
+    height: auto;
+    z-index: 3;
+    filter: drop-shadow(0 6px 14px rgba(190, 130, 155, 0.25));
+  }
+
+  /* ── Título ── */
+  /* El bloque se encoge al ancho de "REGALO", así "Lluvia de sobres"
+     queda centrada bajo él sin tener que calcular márgenes. */
+  #rg-bloque-titulo {
+    position: absolute;
+    top: 3cqw;
+    left: 5cqw;
+    z-index: 3;
+    text-align: center;
+  }
+
+  #rg-titulo {
+    margin: 0;
+    font-size: 12cqw;
+    line-height: 1;
+    font-weight: 400;
+    letter-spacing: normal;
+    text-transform: uppercase;
+    color: #a07954;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
+  }
+
+  #rg-lluvia {
+    margin: 1.5cqw 0 0;
+    font-size: 9cqw;
+    line-height: 1;
+    color: #e58aa6;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
+  }
+
+  /* ── Fecha ── */
+  #rg-mes {
+    position: absolute;
+    top: 34cqw;
+    right: 9cqw;
+    margin: 0;
+    z-index: 3;
+    font-size: 10cqw;
+    line-height: 1;
+    font-weight: 400;
+    letter-spacing: normal;
+    text-transform: uppercase;
+    color: #4f4340;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.75);
+  }
+
+  #rg-numero {
+    position: absolute;
+    top: 45cqw;
+    right: 21cqw;
+    margin: 0;
+    z-index: 3;
+    font-size: 24cqw;
+    line-height: 1;
+    font-weight: 400;
+    color: #e58aa6;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
+  }
+
+  /* ── Guarda la fecha ── */
+  #rg-guarda {
+    position: absolute;
+    top: 66cqw;
+    right: 7cqw;
+    margin: 0;
+    z-index: 4;
+    font-size: 11cqw;
+    line-height: 1.1;
+    color: #e58aa6;
+    text-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.9),
+      0 0 12px rgba(255, 255, 255, 0.85);
+  }
+
+  /* ── Mariposas de la izquierda ── */
+  .rg-mariposa {
+    position: absolute;
+    z-index: 3;
+    pointer-events: none;
+    filter: drop-shadow(0 5px 10px rgba(150, 110, 175, 0.2));
+  }
+
+  .rg-mariposa img {
+    width: 100%;
+    height: auto;
+  }
+
+  .rg-mariposa-1 {
+    top: 42cqw;
+    left: 7cqw;
+    width: 9cqw;
+  }
+
+  .rg-mariposa-2 {
+    top: 53cqw;
+    left: 17cqw;
+    width: 15cqw;
+  }
+
+  .rg-mariposa-3 {
+    top: 68cqw;
+    left: 5cqw;
+    width: 7.5cqw;
+  }
+
+  /* ── Carrito con flores ── */
+  #rg-carrito {
+    position: absolute;
+    bottom: 0;
+    left: -2cqw;
+    width: 100cqw;
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  /* El volteo va en el <img>, no en el contenedor:
+     GSAP anima el contenedor y pisaría el transform. */
+  #rg-carrito img {
+    width: 100%;
+    height: auto;
+    transform: scaleX(-1);
+  }
+
+  /* ── Elefante de la esquina ── */
+  #rg-elefante {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 42cqw;
+    z-index: 3;
+    pointer-events: none;
+    filter: drop-shadow(0 5px 12px rgba(150, 110, 130, 0.22));
+  }
+
+  #rg-elefante img {
+    width: 100%;
+    height: auto;
+  }
+</style>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+  gsap.registerPlugin(ScrollTrigger);
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const inicial = () => {
+      gsap.killTweensOf(["#rg-carta", ".rg-mariposa"]);
+      gsap.set("#rg-corazon", { opacity: 0, scale: 0.7 });
+      gsap.set("#rg-carta", { opacity: 0, x: "35%", y: "-20%", rotation: 0 });
+      gsap.set("#rg-titulo", { opacity: 0, x: -24 });
+      gsap.set("#rg-lluvia", { opacity: 0, y: 14 });
+      gsap.set("#rg-mes", { opacity: 0, x: 24 });
+      gsap.set("#rg-numero", { opacity: 0, y: 18, scale: 0.9 });
+      gsap.set("#rg-guarda", { opacity: 0, y: 16 });
+      gsap.set("#rg-carrito", { opacity: 0, y: "18%" });
+      gsap.set("#rg-elefante", { opacity: 0, x: "-35%", y: "15%" });
+      gsap.set(".rg-mariposa", { opacity: 0, x: "-40%", y: 10, rotation: -8 });
+    };
+
+    inicial();
+
+    ScrollTrigger.create({
+      trigger: "#regalo-section",
+      start: "top 80%",
+      onEnter: () => {
+        const tl = gsap.timeline();
+        tl.to(
+          "#rg-carrito",
+          { opacity: 1, y: 0, duration: 1.6, ease: "power2.out" },
+          0,
+        )
+          .to(
+            "#rg-corazon",
+            { opacity: 1, scale: 1, duration: 1.2, ease: "back.out(1.6)" },
+            0.15,
+          )
+          .to(
+            "#rg-carta",
+            {
+              opacity: 1,
+              x: 0,
+              y: 0,
+              duration: 1.3,
+              ease: "back.out(1.2)",
+            },
+            0.3,
+          )
+          .to(
+            "#rg-titulo",
+            { opacity: 1, x: 0, duration: 1.2, ease: "power2.out" },
+            0.5,
+          )
+          .to(
+            "#rg-lluvia",
+            { opacity: 1, y: 0, duration: 1.1, ease: "power2.out" },
+            0.7,
+          )
+          .to(
+            "#rg-mes",
+            { opacity: 1, x: 0, duration: 1.1, ease: "power2.out" },
+            0.9,
+          )
+          .to(
+            "#rg-numero",
+            {
+              opacity: 1,
+              y: 0,
+              scale: 1,
+              duration: 1.2,
+              ease: "back.out(1.4)",
+            },
+            1.05,
+          )
+          .to(
+            "#rg-guarda",
+            { opacity: 1, y: 0, duration: 1.2, ease: "power2.out" },
+            1.25,
+          )
+          .to(
+            "#rg-elefante",
+            { opacity: 1, x: 0, y: 0, duration: 1.4, ease: "power2.out" },
+            0.5,
+          )
+          .to(
+            ".rg-mariposa",
+            {
+              opacity: 1,
+              x: 0,
+              y: 0,
+              rotation: 0,
+              duration: 1.2,
+              stagger: 0.18,
+              ease: "power2.out",
+            },
+            1.1,
+          )
+          // el sobre respira, como invitando a abrirlo
+          .add(() => {
+            gsap.to("#rg-carta", {
+              y: -5,
+              rotation: -2,
+              duration: 3.2,
+              repeat: -1,
+              yoyo: true,
+              ease: "sine.inOut",
+            });
+
+            // las tres mariposas revolotean, cada una a su ritmo
+            gsap.to(".rg-mariposa-1", {
+              y: -19,
+              x: -9,
+              rotation: -13,
+              duration: 2.3,
+              repeat: -1,
+              yoyo: true,
+              ease: "sine.inOut",
+            });
+            gsap.to(".rg-mariposa-2", {
+              y: -22,
+              x: 10,
+              rotation: 12,
+              duration: 2.8,
+              repeat: -1,
+              yoyo: true,
+              ease: "sine.inOut",
+              delay: 0.5,
+            });
+            gsap.to(".rg-mariposa-3", {
+              y: -16,
+              x: -8,
+              rotation: -10,
+              duration: 3.1,
+              repeat: -1,
+              yoyo: true,
+              ease: "sine.inOut",
+              delay: 0.9,
+            });
+          }, 2.6);
+      },
+      onLeaveBack: inicial,
+    });
+  });
+</script>

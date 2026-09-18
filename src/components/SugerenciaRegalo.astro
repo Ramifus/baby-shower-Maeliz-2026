@@ -1,0 +1,353 @@
+---
+// src/components/SugerenciaRegalo.astro
+// Sugerencia de regalos: misma tarjeta del contador y de "Solo adultos".
+// El botón abre el catálogo en PDF en una pestaña nueva, así el celular lo
+// muestra con su visor nativo (los PDF incrustados fallan en iOS).
+
+// El archivo va en public/ con este nombre.
+const catalogo = "/catalogo.pdf";
+---
+
+<section id="regalos-section">
+  <div id="sr-wrap">
+    <!-- ═══════ TARJETA ═══════ -->
+    <div id="sr-card">
+      <!-- flores asomando en las dos esquinas de arriba -->
+      <div id="sr-flor-izq"><img src="/imagenes/flor.png" alt="" /></div>
+      <div id="sr-flor-der"><img src="/imagenes/flor.png" alt="" /></div>
+
+      <!-- ── Ícono ── -->
+      <div id="sr-icono-regalo" role="img" aria-label="Regalo"></div>
+
+      <!-- ── Título ── -->
+      <p id="sr-sugerencia" class="font-great-vibes">Sugerencia</p>
+      <p id="sr-regalos" class="font-cinzel">De regalos</p>
+
+      <!-- separador dorado -->
+      <div id="sr-divisor">
+        <span class="sr-div-linea"></span>
+        <span class="sr-div-rombo"></span>
+        <span class="sr-div-linea"></span>
+      </div>
+
+      <!-- ── Texto ── -->
+      <p id="sr-texto" class="font-cinzel">
+        Tu presencia es nuestro mejor regalo. Si deseas obsequiarnos un detalle,
+        preparamos un catálogo con algunas ideas.
+      </p>
+
+      <!-- ── Botón ── -->
+      <div id="sr-boton-wrap">
+        <a
+          id="sr-boton"
+          class="font-cinzel"
+          href={catalogo}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <svg class="sr-icono" viewBox="0 0 24 24" aria-hidden="true">
+            <path
+              d="M20 7h-2.2a3 3 0 0 0-.5-3.4A3 3 0 0 0 12 3.6a3 3 0 0 0-5.3-.1A3 3 0 0 0 6.2 7H4a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h7V7h2v5h7a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1Zm-6.3 0a1 1 0 1 1 1.6-1.2A1 1 0 0 1 13.7 7Zm-4.9-.9A1 1 0 0 1 10.3 7H9a1 1 0 0 1-.2-.9ZM4.5 13.5V20a1 1 0 0 0 1 1H11v-7.5Zm8.5 0V21h5.5a1 1 0 0 0 1-1v-6.5Z"
+            ></path>
+          </svg>
+          Ver catálogo
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  #regalos-section {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    overflow-x: hidden;
+    background: transparent;
+    padding: 1rem 0 1.5rem;
+  }
+
+  #sr-wrap {
+    position: relative;
+    width: min(100vw, 480px);
+    container-type: inline-size;
+  }
+
+  #sr-wrap img {
+    display: block;
+    user-select: none;
+    -webkit-user-drag: none;
+    pointer-events: none;
+  }
+
+  /* ═══════ TARJETA ═══════ */
+  /* La misma del contador: rectángulo blanco con trazo rosa. */
+  #sr-card {
+    position: relative;
+    z-index: 2;
+    margin: 0 5cqw;
+    padding: 7cqw 6cqw 7cqw;
+    text-align: center;
+    background: #ffffff;
+    border: 1px solid #e5a8bd;
+    border-radius: 8cqw;
+    /* recorta las flores contra la curva de las esquinas */
+    overflow: hidden;
+  }
+
+  /* ── Flores de las esquinas ── */
+  /* En el archivo el ramo está a la izquierda, así que la de la derecha va
+     volteada: el volteo en el <img> y la animación en el contenedor, porque
+     GSAP escribe su propio transform. */
+  #sr-flor-izq,
+  #sr-flor-der {
+    position: absolute;
+    top: -3cqw;
+    width: 40cqw;
+    opacity: 0.9;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  #sr-flor-izq {
+    left: -6cqw;
+  }
+
+  #sr-flor-der {
+    right: -6cqw;
+  }
+
+  #sr-flor-izq img,
+  #sr-flor-der img {
+    width: 100%;
+    height: auto;
+  }
+
+  #sr-flor-der img {
+    transform: scaleX(-1);
+  }
+
+  /* ── Ícono ── */
+  /* El archivo es un dibujo negro, así que se usa como máscara y el color
+     lo pone el fondo: así queda del rosa exacto de la invitación. */
+  #sr-icono-regalo {
+    position: relative;
+    z-index: 2;
+    width: 17cqw;
+    aspect-ratio: 1;
+    margin: 0 auto 3.5cqw;
+    background-color: #e58aa6;
+    -webkit-mask: url("/imagenes/sorpresa.png") center / contain no-repeat;
+    mask: url("/imagenes/sorpresa.png") center / contain no-repeat;
+  }
+
+  /* ── Título ── */
+  #sr-sugerencia {
+    position: relative;
+    z-index: 2;
+    margin: 0;
+    font-size: 9cqw;
+    /* con line-height 1 la 'g' de Sugerencia chocaba con el renglón de abajo */
+    line-height: 1.2;
+    color: #e58aa6;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.85);
+  }
+
+  #sr-regalos {
+    position: relative;
+    z-index: 2;
+    margin: 3cqw 0 0;
+    font-size: 5.2cqw;
+    line-height: 1.1;
+    font-weight: 400;
+    letter-spacing: 0.18em;
+    /* compensa el espacio que letter-spacing deja tras la última letra */
+    text-indent: 0.18em;
+    text-transform: uppercase;
+    color: #c08b3e;
+  }
+
+  /* ── Separador dorado ── */
+  #sr-divisor {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2.5cqw;
+    margin-top: 4.5cqw;
+  }
+
+  .sr-div-linea {
+    display: block;
+    width: 14cqw;
+    height: 1px;
+    background: rgba(192, 139, 62, 0.7);
+  }
+
+  .sr-div-rombo {
+    display: block;
+    width: 1.6cqw;
+    height: 1.6cqw;
+    transform: rotate(45deg);
+    border: 1px solid #c08b3e;
+    background: rgba(192, 139, 62, 0.25);
+  }
+
+  /* ── Texto ── */
+  #sr-texto {
+    position: relative;
+    z-index: 2;
+    margin: 4.5cqw auto 0;
+    max-width: 68cqw;
+    font-size: 3.4cqw;
+    line-height: 1.75;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #4f4340;
+  }
+
+  /* ── Botón ── */
+  #sr-boton-wrap {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    justify-content: center;
+    margin-top: 5.5cqw;
+  }
+
+  #sr-boton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.8cqw;
+    padding: 2.4cqw 6cqw;
+    border-radius: 999px;
+    background: #e58aa6;
+    color: #ffffff;
+    font-size: 3.8cqw;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-indent: 0.1em;
+    text-transform: uppercase;
+    line-height: 1.2;
+    white-space: nowrap;
+    text-decoration: none;
+    box-shadow: 0 3px 10px rgba(190, 130, 155, 0.32);
+    transition:
+      transform 0.2s ease,
+      opacity 0.2s ease;
+  }
+
+  #sr-boton:hover {
+    opacity: 0.92;
+  }
+
+  #sr-boton:active {
+    transform: scale(0.96);
+  }
+
+  .sr-icono {
+    width: 4.6cqw;
+    height: 4.6cqw;
+    fill: #ffffff;
+    flex-shrink: 0;
+  }
+</style>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+  gsap.registerPlugin(ScrollTrigger);
+
+  document.addEventListener("DOMContentLoaded", () => {
+    // cada pieza llega desde un sitio distinto
+    const inicial = () => {
+      gsap.killTweensOf("#sr-boton");
+      gsap.set("#sr-card", { opacity: 0, y: 26, scale: 0.96 });
+      gsap.set("#sr-flor-izq", { opacity: 0, x: "-35%", y: "-30%" });
+      gsap.set("#sr-flor-der", { opacity: 0, x: "35%", y: "-30%" });
+      gsap.set("#sr-icono-regalo", { opacity: 0, y: -18, scale: 0.7 });
+      gsap.set("#sr-sugerencia", { opacity: 0, y: -22 });
+      gsap.set("#sr-regalos", { opacity: 0, y: 18 });
+      gsap.set("#sr-divisor", { opacity: 0, scaleX: 0.3 });
+      gsap.set("#sr-texto", { opacity: 0, x: -28 });
+      gsap.set("#sr-boton", { opacity: 0, y: 20, scale: 0.9 });
+    };
+
+    inicial();
+
+    ScrollTrigger.create({
+      trigger: "#regalos-section",
+      start: "top 82%",
+      onEnter: () => {
+        const tl = gsap.timeline();
+        tl.to(
+          "#sr-card",
+          { opacity: 1, y: 0, scale: 1, duration: 1.1, ease: "power2.out" },
+          0,
+        )
+          .to(
+            ["#sr-flor-izq", "#sr-flor-der"],
+            { opacity: 0.9, x: 0, y: 0, duration: 1.5, ease: "power2.out" },
+            0.15,
+          )
+          .to(
+            "#sr-icono-regalo",
+            {
+              opacity: 1,
+              y: 0,
+              scale: 1,
+              duration: 1.2,
+              ease: "back.out(1.6)",
+            },
+            0.2,
+          )
+          .to(
+            "#sr-sugerencia",
+            { opacity: 1, y: 0, duration: 1.4, ease: "back.out(1.2)" },
+            0.25,
+          )
+          .to(
+            "#sr-regalos",
+            { opacity: 1, y: 0, duration: 1.3, ease: "power3.out" },
+            0.4,
+          )
+          .to(
+            "#sr-divisor",
+            { opacity: 1, scaleX: 1, duration: 1.2, ease: "power3.out" },
+            0.55,
+          )
+          .to(
+            "#sr-texto",
+            { opacity: 1, x: 0, duration: 1.3, ease: "power3.out" },
+            0.7,
+          )
+          .to(
+            "#sr-boton",
+            {
+              opacity: 1,
+              y: 0,
+              scale: 1,
+              duration: 1.2,
+              ease: "back.out(1.5)",
+            },
+            0.9,
+          )
+          // el botón late suave para que se note que se puede tocar
+          .add(() => {
+            gsap.to("#sr-boton", {
+              scale: 1.04,
+              duration: 1.9,
+              repeat: -1,
+              yoyo: true,
+              ease: "sine.inOut",
+            });
+          }, 2.4);
+      },
+      onLeaveBack: inicial,
+    });
+  });
+</script>

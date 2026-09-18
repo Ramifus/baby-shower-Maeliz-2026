@@ -1,0 +1,467 @@
+---
+// src/components/NombresFlores.astro
+// Bienvenida — jardín con flores arriba, césped abajo y el pato al frente
+// Mismo lienzo de ancho fijo que la Portada: todo en cqw para que se vea
+// igual en celular, laptop y PC.
+//
+// Orden: esquinas de flores · texto · césped con el pato encima
+---
+
+<section id="nombres-flores">
+  <div id="nf-marco">
+    <!-- ═══════ ESQUINAS DE ARRIBA ═══════ -->
+    <img id="nf-flor-izq" src="/imagenes/florlateral.png" alt="" />
+    <img id="nf-esquina-der" src="/imagenes/esquinaderecha.png" alt="" />
+
+    <!-- ═══════ TEXTO CENTRAL ═══════ -->
+    <div id="nf-texto">
+      <p id="nf-invito" class="font-cinzel">Te invito a mi</p>
+
+      <!-- El título va en texto, no en imagen: se recorta nítido en
+           cualquier pantalla y usa las fuentes ya cargadas. -->
+      <div id="nf-titulo" class="font-cinzel">
+        <span id="nf-baby">Baby</span>
+        <span id="nf-shower" class="font-great-vibes">Shower</span>
+      </div>
+
+      <p id="nf-nombre" class="font-cinzel">Sienna Diana</p>
+
+      <!-- corazoncitos sueltos a los costados del título -->
+      <svg class="nf-corazon nf-corazon-izq" viewBox="0 0 20 18" aria-hidden="true">
+        <path
+          d="M10 17 C 1 9.5, 0.5 4, 4.5 1.8 C 7.2 0.3, 9 2.5, 10 4.6 C 11 2.5, 12.8 0.3, 15.5 1.8 C 19.5 4, 19 9.5, 10 17 Z"
+          fill="#f0adbb"
+        ></path>
+      </svg>
+      <svg class="nf-corazon nf-corazon-der" viewBox="0 0 20 18" aria-hidden="true">
+        <path
+          d="M10 17 C 1 9.5, 0.5 4, 4.5 1.8 C 7.2 0.3, 9 2.5, 10 4.6 C 11 2.5, 12.8 0.3, 15.5 1.8 C 19.5 4, 19 9.5, 10 17 Z"
+          fill="#f0adbb"
+        ></path>
+      </svg>
+    </div>
+
+    <!-- ═══════ CÉSPED + PATO ═══════ -->
+    <!-- El césped va en flujo y es quien le da el alto al pie; el pato se
+         apoya encima, medido desde abajo para que siempre pise el pasto. -->
+    <div id="nf-pie">
+      <img id="nf-cesped" src="/imagenes/cesped.png" alt="" />
+      <img id="nf-pato" src="/imagenes/pato.png" alt="" />
+    </div>
+  </div>
+
+  <!-- 🎵 BOTÓN FLOTANTE DE MÚSICA -->
+  <div
+    class="fixed bottom-6 right-6 z-[9999]"
+    id="boton-musica-flotante"
+    style="opacity: 0;"
+  >
+    <button
+      id="toggle-musica-global"
+      class="group relative w-14 h-14 rounded-full shadow-lg flex items-center justify-center transition-all duration-200 hover:scale-110 active:scale-95"
+      style="background: rgba(255,255,255,0.85); backdrop-filter: blur(8px); border: 1px solid rgba(212,122,149,0.55);"
+      aria-label="Controlar música"
+    >
+      <!-- ICONO PAUSE - inicia oculto -->
+      <svg
+        id="icono-pause-global"
+        class="w-6 h-6 hidden relative z-10"
+        style="color: #d47a95;"
+        fill="currentColor"
+        viewBox="0 0 20 20"
+      >
+        <path
+          d="M5.5 3.5A1.5 1.5 0 017 2h1a1.5 1.5 0 011.5 1.5v13A1.5 1.5 0 018 18H7a1.5 1.5 0 01-1.5-1.5v-13zm7 0A1.5 1.5 0 0114 2h1a1.5 1.5 0 011.5 1.5v13a1.5 1.5 0 01-1.5 1.5h-1a1.5 1.5 0 01-1.5-1.5v-13z"
+        ></path>
+      </svg>
+
+      <!-- ICONO PLAY - inicia visible -->
+      <svg
+        id="icono-play-global"
+        class="w-6 h-6 relative z-10"
+        style="color: #d47a95;"
+        fill="currentColor"
+        viewBox="0 0 20 20"
+      >
+        <path
+          d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z"
+        ></path>
+      </svg>
+
+      <!-- Onda de sonido - inicia oculta -->
+      <div
+        class="absolute -inset-2 rounded-full hidden"
+        style="border: 2px solid rgba(212,122,149,0.55);"
+        id="onda-sonido"
+      >
+      </div>
+    </button>
+  </div>
+</section>
+
+<style>
+  #nombres-flores {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
+    /* deja ver el fondo global estático del Layout */
+    background: transparent;
+  }
+
+  /* ═══════ LIENZO (mismo ancho que la portada) ═══════ */
+  #nf-marco {
+    position: relative;
+    width: min(100vw, 480px);
+    container-type: inline-size;
+    /* La altura la define el contenido, no un aspect-ratio fijo: así la
+       sección termina justo donde termina el césped. El padding de arriba
+       reserva el sitio de las dos esquinas de flores. */
+    padding-top: 45cqw;
+  }
+
+  #nf-marco img {
+    display: block;
+    user-select: none;
+    -webkit-user-drag: none;
+  }
+
+  /* ── Esquinas de flores ── */
+  #nf-flor-izq {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 48cqw;
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  #nf-esquina-der {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 42cqw;
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  /* ── Bloque de texto central ── */
+  /* En flujo normal: es lo que le da la altura a esta parte. */
+  #nf-texto {
+    position: relative;
+    width: 94cqw;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    z-index: 4;
+  }
+
+  #nf-invito {
+    margin: 0;
+    font-size: 4.6cqw;
+    line-height: 1.4;
+    font-weight: 500;
+    letter-spacing: 0.26em;
+    /* compensa el espacio que letter-spacing deja tras la última letra */
+    padding-left: 0.26em;
+    text-transform: uppercase;
+    /* siempre en una sola línea */
+    white-space: nowrap;
+    color: #c2a05a;
+  }
+
+  /* ── Título Baby Shower ── */
+  #nf-titulo {
+    margin-top: 1.5cqw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 1;
+  }
+
+  #nf-baby {
+    font-size: 15.5cqw;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    /* el espaciado queda colgando tras la última letra: se compensa */
+    padding-left: 0.05em;
+    text-transform: uppercase;
+    color: #e8939f;
+  }
+
+  #nf-shower {
+    /* Great Vibes: sin mayúsculas forzadas ni espaciado entre letras,
+       esa cursiva no las tolera. Va más grande porque su caja de letra es
+       chica al lado de la versalita de BABY, y montada sobre ella. */
+    margin-top: -4cqw;
+    font-size: 21cqw;
+    font-weight: 400;
+    line-height: 1.1;
+    color: #c29a3c;
+  }
+
+  #nf-nombre {
+    margin: 4cqw 0 0;
+    font-size: 8cqw;
+    line-height: 1.15;
+    /* el nombre nunca se parte en dos renglones */
+    white-space: nowrap;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    /* compensa el espacio que letter-spacing deja tras la última letra */
+    padding-left: 0.04em;
+    text-transform: uppercase;
+    /* Dorado plano, sin degradados */
+    color: #c9a227;
+  }
+
+  /* ── Corazoncitos sueltos ── */
+  .nf-corazon {
+    position: absolute;
+    width: 4.2cqw;
+    height: auto;
+    z-index: 3;
+    pointer-events: none;
+  }
+
+  .nf-corazon-izq {
+    top: 28cqw;
+    left: 1cqw;
+  }
+
+  .nf-corazon-der {
+    top: 24cqw;
+    right: 2cqw;
+  }
+
+  /* ── Césped + pato ── */
+  #nf-pie {
+    position: relative;
+    width: 100%;
+    /* el césped se solapa un poco con el texto, como en el diseño */
+    margin-top: -6cqw;
+    z-index: 2;
+  }
+
+  #nf-cesped {
+    width: 100%;
+    height: auto;
+    pointer-events: none;
+  }
+
+  #nf-pato {
+    position: absolute;
+    /* medido desde abajo: siempre apoyado sobre el pasto */
+    bottom: 3cqw;
+    left: 20cqw;
+    width: 34cqw;
+    height: auto;
+    z-index: 3;
+    pointer-events: none;
+  }
+
+  /* ── Botón de música ── */
+  #onda-sonido {
+    animation: ping-slow 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+  }
+
+  @keyframes ping-slow {
+    0% {
+      transform: scale(1);
+      opacity: 0.5;
+    }
+    75%,
+    100% {
+      transform: scale(1.3);
+      opacity: 0;
+    }
+  }
+
+  @keyframes pulse-subtle {
+    0%,
+    100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.05);
+    }
+  }
+
+  #boton-musica-flotante button {
+    animation: pulse-subtle 3s ease-in-out infinite;
+  }
+
+  #boton-musica-flotante button:hover {
+    animation: none;
+  }
+</style>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+  gsap.registerPlugin(ScrollTrigger);
+
+  document.addEventListener("DOMContentLoaded", () => {
+    // ── Entrada animada ───────────────────────────────────────
+    // Las esquinas caen desde arriba, el texto se abre desde los costados,
+    // el césped sube desde el pie y el pato aparece al final.
+    const inicial = () => {
+      gsap.set("#nf-flor-izq", { opacity: 0, x: -26, y: -30 });
+      gsap.set("#nf-esquina-der", { opacity: 0, x: 26, y: -30 });
+      gsap.set("#nf-invito", { opacity: 0, x: -40 });
+      gsap.set("#nf-titulo", { opacity: 0, y: -28, scale: 0.9 });
+      gsap.set("#nf-nombre", { opacity: 0, x: 40 });
+      gsap.set(".nf-corazon", { opacity: 0, scale: 0.5 });
+      gsap.set("#nf-cesped", { opacity: 0, y: 40 });
+      gsap.set("#nf-pato", { opacity: 0, y: 34, scale: 0.9 });
+    };
+
+    inicial();
+
+    const latirCorazones = () => {
+      gsap.to(".nf-corazon", {
+        scale: 1.18,
+        duration: 1.5,
+        repeat: -1,
+        yoyo: true,
+        stagger: 0.4,
+        ease: "sine.inOut",
+      });
+    };
+
+    const armarEntrada = () => {
+      ScrollTrigger.create({
+        trigger: "#nombres-flores",
+        start: "top 85%",
+        onEnter: () => {
+          const tl = gsap.timeline();
+          tl.to(
+            ["#nf-flor-izq", "#nf-esquina-der"],
+            { opacity: 1, x: 0, y: 0, duration: 1.6, ease: "power2.out" },
+            0,
+          )
+            .to(
+              "#nf-cesped",
+              { opacity: 1, y: 0, duration: 1.6, ease: "power2.out" },
+              0,
+            )
+            .to(
+              "#nf-invito",
+              { opacity: 1, x: 0, duration: 1.4, ease: "power3.out" },
+              0.1,
+            )
+            .to(
+              "#nf-titulo",
+              {
+                opacity: 1,
+                y: 0,
+                scale: 1,
+                duration: 1.5,
+                ease: "back.out(1.2)",
+              },
+              0.2,
+            )
+            .to(
+              "#nf-nombre",
+              { opacity: 1, x: 0, duration: 1.4, ease: "power3.out" },
+              0.3,
+            )
+            .to(
+              "#nf-pato",
+              {
+                opacity: 1,
+                y: 0,
+                scale: 1,
+                duration: 1.5,
+                ease: "back.out(1.2)",
+              },
+              0.4,
+            )
+            .to(
+              ".nf-corazon",
+              {
+                opacity: 1,
+                scale: 1,
+                duration: 1,
+                stagger: 0.15,
+                ease: "back.out(1.6)",
+              },
+              0.6,
+            )
+            .add(latirCorazones, 2);
+        },
+        // al volver a subir se rearma, así la animación se repite en cada bajada
+        onLeaveBack: () => {
+          gsap.killTweensOf(".nf-corazon");
+          inicial();
+        },
+      });
+
+      ScrollTrigger.refresh();
+    };
+
+    // Esta sección queda detrás de la portada, así que al cargar la página ya
+    // está "en pantalla" y la animación se gastaría sin que nadie la vea.
+    // Por eso se arma recién cuando el invitado abre el sobre. Si la portada
+    // no está en uso, arranca de una.
+    const hayPortada = document.getElementById("portada-section");
+
+    if (!hayPortada || (window as any).invitacionAbierta) {
+      armarEntrada();
+    } else {
+      window.addEventListener("invitacion-abierta", armarEntrada, {
+        once: true,
+      });
+    }
+
+    // ── Botón flotante de música ──────────────────────────────
+    const botonToggle = document.getElementById("toggle-musica-global");
+    const iconoPlay = document.getElementById("icono-play-global");
+    const iconoPause = document.getElementById("icono-pause-global");
+    const ondaSonido = document.getElementById("onda-sonido");
+    const botonFlotante = document.getElementById("boton-musica-flotante");
+
+    if (botonFlotante) botonFlotante.style.opacity = "1";
+
+    // Sincronizar estado visual al cargar (por si la música ya venía corriendo desde Portada)
+    function sincronizarEstadoInicial() {
+      const estadoActual = (window as any).estaReproduciendoGlobal;
+      if (estadoActual) {
+        iconoPlay?.classList.add("hidden");
+        iconoPause?.classList.remove("hidden");
+        ondaSonido?.classList.remove("hidden");
+      }
+    }
+
+    sincronizarEstadoInicial();
+
+    // Portada dispara este evento cuando el invitado toca el sobre
+    window.addEventListener("musica-iniciada", () => {
+      iconoPlay?.classList.add("hidden");
+      iconoPause?.classList.remove("hidden");
+      ondaSonido?.classList.remove("hidden");
+    });
+
+    botonToggle?.addEventListener("click", () => {
+      const audioActual = (window as any).audioGlobal;
+      const estadoActual = (window as any).estaReproduciendoGlobal;
+
+      if (estadoActual && audioActual) {
+        audioActual.pause();
+        (window as any).estaReproduciendoGlobal = false;
+        iconoPause?.classList.add("hidden");
+        iconoPlay?.classList.remove("hidden");
+        ondaSonido?.classList.add("hidden");
+      } else if (audioActual) {
+        audioActual.play().catch(() => {});
+        (window as any).estaReproduciendoGlobal = true;
+        iconoPlay?.classList.add("hidden");
+        iconoPause?.classList.remove("hidden");
+        ondaSonido?.classList.remove("hidden");
+      }
+    });
+  });
+</script>

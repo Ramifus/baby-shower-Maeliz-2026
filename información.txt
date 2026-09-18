@@ -1,0 +1,25 @@
+DATOS PARA REALIZAR LA INVITACIÓN
+
+1. Nombre de la quinceañera: Valentina
+2. Nombres de los padres:
+   Padre: Roberto Flores García
+   Madre: Patricia Mendoza de Flores
+3. Nombres de los padrinos:
+   Eduardo Herrera y Lorena Ramírez
+4. Fecha del evento: 12/09/2026
+5. Dirección (ceremonia y recepción):
+   Salón de Eventos Las Magnolias
+   Av. Los Cerezos #456, entre calle Primavera y calle Los Jazmines
+   Hora de la ceremonia: 19:00 hrs
+6. Número de WhatsApp para confirmación: 77654321 con código Bolivia +591
+   Texto predeterminado: Me complace confirmar mi asistencia para los 15 años de Valentina. Nos vemos el sábado 12 de septiembre. ¡Estaré sin falta!
+7. Itinerario:
+   Ceremonia religiosa: 18:00 hrs
+   Entrada y vals: 20:00 hrs
+   Sesión de fotos: 21:00 hrs
+   Juegos y dinámicas: 21:30 hrs
+   Cena: 22:30 hrs
+   Entrega de regalos: 23:00 hrs
+   Fiesta: 23:30 hrs
+   Torta: 12:30 AM
+   Código de vestimenta: Formal

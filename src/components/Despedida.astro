@@ -1,0 +1,298 @@
+---
+// src/components/Despedida.astro
+// El cierre de la invitación: el saludo final y la patita en su jardín.
+// No lleva tarjeta a propósito — después de tantos marcos, el final se abre
+// y se funde con el fondo.
+
+const despedida = {
+  titulo: "¡Te esperamos!",
+  mensaje:
+    "Gracias por acompañarnos en la espera de nuestra princesa. Tu presencia es el mejor regalo.",
+  firma: "Con cariño, sus papás",
+};
+
+// El mismo corazoncito que usan los demás bloques.
+const CORAZON =
+  "M10 17 C 1 9.5, 0.5 4, 4.5 1.8 C 7.2 0.3, 9 2.5, 10 4.6 C 11 2.5, 12.8 0.3, 15.5 1.8 C 19.5 4, 19 9.5, 10 17 Z";
+
+// Corazones sueltos que bordean el saludo, cada uno con su tono, su tamaño
+// y su propio ritmo de latido para que no palpiten todos a la vez.
+const corazones = [
+  { top: "4cqw", left: "8cqw", size: "3cqw", color: "var(--rosa-bebe)", dur: "3.1s", delay: "0.4s" },
+  { top: "10cqw", right: "9cqw", size: "2.6cqw", color: "#f3b9c6", dur: "2.7s", delay: "0.9s" },
+  { top: "26cqw", left: "5cqw", size: "2.4cqw", color: "var(--amarillo-pastel)", dur: "3.4s", delay: "1.3s" },
+  { top: "31cqw", right: "6cqw", size: "2.8cqw", color: "#f3b9c6", dur: "2.9s", delay: "0.2s" },
+];
+---
+
+<section id="despedida-section">
+  <div id="dp-wrap">
+    <!-- ═══════ SALUDO ═══════ -->
+    <div id="dp-texto">
+      {
+        corazones.map((c) => (
+          <svg
+            class="dp-latido"
+            viewBox="0 0 20 18"
+            aria-hidden="true"
+            style={`top:${c.top}; ${c.left ? `left:${c.left};` : `right:${c.right};`} width:${c.size}; color:${c.color}; animation-duration:${c.dur}; animation-delay:${c.delay};`}
+          >
+            <path d={CORAZON} fill="currentColor" />
+          </svg>
+        ))
+      }
+
+      <!-- el separador de la casa: dos líneas que se desvanecen y el
+           corazón al centro -->
+      <div id="dp-divisor">
+        <span class="dp-div-linea"></span>
+        <svg class="dp-div-corazon" viewBox="0 0 20 18" aria-hidden="true">
+          <path d={CORAZON}></path>
+        </svg>
+        <span class="dp-div-linea dp-div-linea-der"></span>
+      </div>
+
+      <p id="dp-titulo" class="font-halfterm">{despedida.titulo}</p>
+
+      <p id="dp-mensaje" class="font-halfterm">{despedida.mensaje}</p>
+
+      <p id="dp-firma" class="font-halfterm">{despedida.firma}</p>
+    </div>
+
+    <!-- ═══════ EL JARDÍN CON LA PATITA ═══════ -->
+    <!-- El jardín va en flujo y es quien le da el alto al pie; la patita se
+         apoya encima, al medio, medida desde abajo para que siempre pise el
+         pasto. -->
+    <div id="dp-pie">
+      <img id="dp-jardin" src="/imagenes/abajo3.png" alt="" />
+      <img id="dp-patita" src="/imagenes/patita2.png" alt="" />
+    </div>
+  </div>
+</section>
+
+<style>
+  #despedida-section {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    overflow-x: hidden;
+    background: transparent;
+    /* sin aire abajo: el jardín cierra la sección pegado al borde */
+    padding: 1rem 0 0;
+  }
+
+  #dp-wrap {
+    position: relative;
+    width: min(100vw, 480px);
+    container-type: inline-size;
+  }
+
+  #dp-wrap img {
+    display: block;
+    user-select: none;
+    -webkit-user-drag: none;
+    pointer-events: none;
+  }
+
+  /* ═══════ SALUDO ═══════ */
+  #dp-texto {
+    position: relative;
+    z-index: 2;
+    padding: 0 6cqw;
+    text-align: center;
+  }
+
+  /* ── Separador ── */
+  #dp-divisor {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2.6cqw;
+    margin-bottom: 4cqw;
+  }
+
+  /* la línea nace transparente y se va tiñendo hacia el corazón */
+  .dp-div-linea {
+    display: block;
+    width: 16cqw;
+    height: 1px;
+    background-image: linear-gradient(
+      to right,
+      rgba(169, 192, 141, 0),
+      var(--verde-suave)
+    );
+  }
+
+  .dp-div-linea-der {
+    background-image: linear-gradient(
+      to left,
+      rgba(169, 192, 141, 0),
+      var(--verde-suave)
+    );
+  }
+
+  .dp-div-corazon {
+    flex: none;
+    width: 4cqw;
+    height: auto;
+    fill: var(--rosa-bebe);
+  }
+
+  /* ── Textos ── */
+  #dp-titulo {
+    margin: 0;
+    font-size: 11cqw;
+    line-height: 1.15;
+    font-weight: 400;
+    color: var(--fucsia-texto);
+  }
+
+  #dp-mensaje {
+    margin: 3.4cqw auto 0;
+    max-width: 76cqw;
+    font-size: 5.8cqw;
+    line-height: 1.55;
+    font-weight: 400;
+    color: var(--beige-texto);
+  }
+
+  #dp-firma {
+    margin: 4cqw 0 0;
+    font-size: 6.4cqw;
+    line-height: 1.2;
+    font-weight: 400;
+    color: var(--verde-texto);
+  }
+
+  /* ── Corazoncitos que laten alrededor del saludo ── */
+  /* La posición, el tamaño, el tono y el ritmo salen del listado de arriba:
+     acá va solo lo que comparten todos. */
+  .dp-latido {
+    position: absolute;
+    height: auto;
+    z-index: 1;
+    pointer-events: none;
+    animation-name: latir-dp;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+  }
+
+  @keyframes latir-dp {
+    from {
+      transform: scale(1);
+    }
+    to {
+      transform: scale(1.22);
+    }
+  }
+
+  /* ═══════ EL JARDÍN ═══════ */
+  #dp-pie {
+    position: relative;
+    width: 100%;
+    margin-top: 4cqw;
+    z-index: 1;
+  }
+
+  #dp-jardin {
+    width: 100%;
+    height: auto;
+    /* el pasto termina de golpe: los últimos milímetros se desvanecen para
+       que no se vea la línea del recorte */
+    -webkit-mask-image: linear-gradient(
+      to bottom,
+      #000 88%,
+      rgba(0, 0, 0, 0.55) 95%,
+      transparent 100%
+    );
+    mask-image: linear-gradient(
+      to bottom,
+      #000 88%,
+      rgba(0, 0, 0, 0.55) 95%,
+      transparent 100%
+    );
+  }
+
+  /* ── La patita, al medio ── */
+  /* Centrada con margen negativo y no con transform: GSAP escribe su propio
+     transform al hacerla entrar y se lo comería. */
+  #dp-patita {
+    position: absolute;
+    bottom: 3cqw;
+    left: 50%;
+    margin-left: -19cqw;
+    width: 38cqw;
+    height: auto;
+    z-index: 2;
+  }
+</style>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+  gsap.registerPlugin(ScrollTrigger);
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const inicial = () => {
+      gsap.set("#dp-divisor", { opacity: 0, scaleX: 0.3 });
+      gsap.set("#dp-titulo", { opacity: 0, y: -18 });
+      gsap.set("#dp-mensaje", { opacity: 0, y: 16 });
+      gsap.set("#dp-firma", { opacity: 0, y: 14 });
+      gsap.set("#dp-jardin", { opacity: 0, y: 30 });
+      gsap.set("#dp-patita", { opacity: 0, y: 26 });
+      // los corazones solo se funden: el latido lo lleva el CSS, así GSAP
+      // no les pisa el transform
+      gsap.set(".dp-latido", { opacity: 0 });
+    };
+
+    inicial();
+
+    ScrollTrigger.create({
+      trigger: "#despedida-section",
+      start: "top 82%",
+      onEnter: () => {
+        const tl = gsap.timeline();
+        tl.to(
+          "#dp-divisor",
+          { opacity: 1, scaleX: 1, duration: 1.2, ease: "power3.out" },
+          0,
+        )
+          .to(
+            "#dp-titulo",
+            { opacity: 1, y: 0, duration: 1.3, ease: "back.out(1.2)" },
+            0.15,
+          )
+          .to(
+            "#dp-mensaje",
+            { opacity: 1, y: 0, duration: 1.2, ease: "power2.out" },
+            0.35,
+          )
+          .to(
+            "#dp-firma",
+            { opacity: 1, y: 0, duration: 1.1, ease: "power2.out" },
+            0.55,
+          )
+          // el jardín sube y cierra la invitación, y la patita aparece
+          // después, saludando
+          .to(
+            "#dp-jardin",
+            { opacity: 1, y: 0, duration: 1.6, ease: "power2.out" },
+            0.5,
+          )
+          .to(
+            "#dp-patita",
+            { opacity: 1, y: 0, duration: 1.3, ease: "back.out(1.2)" },
+            0.85,
+          )
+          .to(
+            ".dp-latido",
+            { opacity: 1, duration: 1.1, stagger: 0.1, ease: "power2.out" },
+            0.8,
+          );
+      },
+      onLeaveBack: inicial,
+    });
+  });
+</script>

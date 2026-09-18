@@ -1,0 +1,378 @@
+---
+// src/components/Contador.astro
+// Cuenta regresiva: el mismo marco crema con pespunte de la tarjeta de los
+// papás, el moño montado sobre el borde de arriba, el título en dos renglones
+// y los números separados por dos puntos.
+// La fecha no se repite aquí: ya la muestra Fecha.astro.
+---
+
+<section id="contador-section">
+  <div id="cd-wrap">
+    <!-- ═══════ TARJETA ═══════ -->
+    <div id="cd-card">
+      <!-- el moño con flores, montado sobre el borde de arriba -->
+      <img id="cd-mono" src="/imagenes/separador.png" alt="" />
+
+      <!-- ── Título ── -->
+      <!-- Una mariposa a cada lado del título, las dos mirando al texto: por
+           eso la de la izquierda usa el archivo que mira a la derecha y
+           viceversa. Nada de voltear por CSS, que GSAP escribe su propio
+           transform al hacerlas revolotear. -->
+      <span class="cd-mariposa" id="cd-mariposa-izq">
+        <img src="/imagenes/mariposa.png" alt="" />
+      </span>
+      <span class="cd-mariposa" id="cd-mariposa-der">
+        <img src="/imagenes/mariposaizq.png" alt="" />
+      </span>
+
+      <p id="cd-cuenta" class="font-halfterm">Cuenta</p>
+      <p id="cd-regresiva" class="font-halfterm">Regresiva</p>
+
+      <!-- ── Números ── -->
+      <div id="cd-numeros">
+        <div class="cd-box">
+          <p id="dias" class="cd-num font-halfterm">00</p>
+          <p class="cd-lbl font-halfterm">Días</p>
+        </div>
+
+        <span class="cd-sep font-halfterm">:</span>
+
+        <div class="cd-box">
+          <p id="horas" class="cd-num font-halfterm">00</p>
+          <p class="cd-lbl font-halfterm">Horas</p>
+        </div>
+
+        <span class="cd-sep font-halfterm">:</span>
+
+        <div class="cd-box">
+          <p id="minutos" class="cd-num font-halfterm">00</p>
+          <p class="cd-lbl font-halfterm">Minutos</p>
+        </div>
+
+        <span class="cd-sep font-halfterm">:</span>
+
+        <div class="cd-box">
+          <p id="segundos" class="cd-num font-halfterm">00</p>
+          <p class="cd-lbl font-halfterm">Segundos</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  #contador-section {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    overflow-x: hidden;
+    background: transparent;
+    padding: 1rem 0 1.5rem;
+  }
+
+  #cd-wrap {
+    position: relative;
+    width: min(100vw, 480px);
+    container-type: inline-size;
+  }
+
+  #cd-wrap img {
+    display: block;
+    user-select: none;
+    -webkit-user-drag: none;
+    pointer-events: none;
+  }
+
+  /* ═══════ TARJETA ═══════ */
+  /* El mismo marco que la tarjeta de los papás: crema con pespunte por
+     dentro. El crema va como imagen, que el modo oscuro forzado oscurece
+     los colores pero respeta las imágenes. */
+  #cd-card {
+    position: relative;
+    z-index: 2;
+    margin: 12cqw 2cqw 0;
+    padding: 11cqw 2.5cqw 7cqw;
+    text-align: center;
+    background-image: linear-gradient(#fdf3f1, #fdf3f1);
+    border: 1px solid #f0d7d6;
+    border-radius: 5cqw;
+    box-shadow: 0 3px 14px rgba(200, 165, 155, 0.18);
+  }
+
+  /* el pespunte, una línea cortada por dentro del borde */
+  #cd-card::before {
+    content: "";
+    position: absolute;
+    inset: 2cqw;
+    border: 1px dashed #e9c3c4;
+    border-radius: 3.4cqw;
+    pointer-events: none;
+  }
+
+  /* ── Moño de arriba ── */
+  /* Centrado y montado sobre el borde, igual que en la tarjeta de los papás. */
+  #cd-mono {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 50cqw;
+    height: auto;
+    transform: translate(-50%, -55%);
+    z-index: 3;
+  }
+
+  /* ── Mariposas del título ── */
+  /* Van en el hueco que queda a los lados de "Cuenta regresiva" */
+  .cd-mariposa {
+    position: absolute;
+    display: block;
+    width: 11cqw;
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  .cd-mariposa img {
+    width: 100%;
+    height: auto;
+  }
+
+  #cd-mariposa-izq {
+    top: 14cqw;
+    left: 7cqw;
+  }
+
+  #cd-mariposa-der {
+    top: 17cqw;
+    right: 7cqw;
+  }
+
+  /* ── Título ── */
+  #cd-cuenta {
+    position: relative;
+    z-index: 2;
+    margin: 0;
+    font-size: 12.6cqw;
+    line-height: 1.1;
+    font-weight: 400;
+    color: var(--fucsia-texto);
+  }
+
+  #cd-regresiva {
+    position: relative;
+    z-index: 2;
+    margin: 0.4cqw 0 0;
+    font-size: 8.8cqw;
+    line-height: 1.1;
+    font-weight: 400;
+    color: var(--verde-texto);
+  }
+
+  /* ── Números ── */
+  #cd-numeros {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 0.4cqw;
+    margin-top: 5cqw;
+  }
+
+  /* cada cifra sobre su chapita blanca, con el mismo trazo rosa */
+  .cd-box {
+    width: 19.5cqw;
+    padding: 2.4cqw 0 2cqw;
+    background-image: linear-gradient(#ffffff, #ffffff);
+    border: 1px solid #f0d7d6;
+    border-radius: 3cqw;
+  }
+
+  .cd-num {
+    margin: 0;
+    font-size: 12cqw;
+    font-weight: 400;
+    line-height: 1;
+    color: var(--fucsia-texto);
+  }
+
+  .cd-lbl {
+    margin: 1.4cqw 0 0;
+    font-size: 4.8cqw;
+    font-weight: 400;
+    line-height: 1.1;
+    color: var(--beige-texto);
+  }
+
+  /* los dos puntos van a la altura de las cifras, no de las etiquetas */
+  .cd-sep {
+    padding-top: 4.6cqw;
+    font-size: 9cqw;
+    line-height: 1;
+    color: var(--rosa-bebe);
+  }
+</style>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+  gsap.registerPlugin(ScrollTrigger);
+
+  // 3 de octubre de 2026, 14:30
+  const FECHA_EVENTO = { año: 2026, mes: 10, dia: 3, hora: 14, minuto: 30 };
+
+  const initContador = () => {
+    const mariposas = ["#cd-mariposa-izq", "#cd-mariposa-der"];
+
+    const inicial = () => {
+      // corta el revoloteo y deja las mariposas en su sitio
+      gsap.killTweensOf(mariposas);
+      gsap.set(mariposas, { opacity: 0, x: 0, y: 0, rotation: 0 });
+      // cada pieza llega desde un sitio distinto
+      gsap.set("#cd-card", { opacity: 0, y: 26, scale: 0.96 });
+      // el moño solo se funde: el centrado lo lleva el CSS, así GSAP no le
+      // pisa el transform
+      gsap.set("#cd-mono", { opacity: 0 });
+      gsap.set("#cd-cuenta", { opacity: 0, y: -24 });
+      gsap.set("#cd-regresiva", { opacity: 0, y: 20 });
+      // los cuatro recuadros entran uno de cada dirección
+      gsap.set("#dias", { opacity: 0, x: -34 });
+      gsap.set("#horas", { opacity: 0, y: -30 });
+      gsap.set("#minutos", { opacity: 0, y: 30 });
+      gsap.set("#segundos", { opacity: 0, x: 34 });
+      gsap.set(".cd-lbl", { opacity: 0, y: 10 });
+      gsap.set(".cd-sep", { opacity: 0, scale: 0.4 });
+    };
+
+    inicial();
+
+    ScrollTrigger.create({
+      trigger: "#contador-section",
+      start: "top 82%",
+      onEnter: () => {
+        const tl = gsap.timeline();
+        tl.to(
+          "#cd-card",
+          { opacity: 1, y: 0, scale: 1, duration: 1.1, ease: "power2.out" },
+          0,
+        )
+          .to(
+            "#cd-mono",
+            { opacity: 1, duration: 1.3, ease: "power2.out" },
+            0.15,
+          )
+          .to(
+            "#cd-cuenta",
+            { opacity: 1, y: 0, duration: 1.4, ease: "back.out(1.2)" },
+            0.25,
+          )
+          .to(
+            "#cd-regresiva",
+            { opacity: 1, y: 0, duration: 1.3, ease: "power3.out" },
+            0.4,
+          )
+          .to(
+            ["#dias", "#horas", "#minutos", "#segundos"],
+            {
+              opacity: 1,
+              x: 0,
+              y: 0,
+              duration: 1.3,
+              stagger: 0.1,
+              ease: "back.out(1.3)",
+            },
+            0.55,
+          )
+          .to(
+            ".cd-lbl",
+            {
+              opacity: 1,
+              y: 0,
+              duration: 1.0,
+              stagger: 0.1,
+              ease: "power2.out",
+            },
+            0.85,
+          )
+          .to(
+            ".cd-sep",
+            {
+              opacity: 1,
+              scale: 1,
+              duration: 0.9,
+              stagger: 0.1,
+              ease: "back.out(2)",
+            },
+            1.0,
+          )
+          .to(
+            mariposas,
+            { opacity: 1, duration: 1.2, stagger: 0.12, ease: "power2.out" },
+            0.5,
+          )
+          // y quedan revoloteando, cada una a su ritmo para que no vayan a
+          // la par
+          .add(() => {
+            gsap.to("#cd-mariposa-izq", {
+              y: -13,
+              x: -6,
+              rotation: -10,
+              duration: 2.3,
+              repeat: -1,
+              yoyo: true,
+              ease: "sine.inOut",
+            });
+            gsap.to("#cd-mariposa-der", {
+              y: -12,
+              x: 6,
+              rotation: 10,
+              duration: 2.8,
+              repeat: -1,
+              yoyo: true,
+              ease: "sine.inOut",
+              delay: 0.5,
+            });
+          }, 1.8);
+      },
+      onLeaveBack: inicial,
+    });
+
+    // ── Cuenta regresiva ──────────────────────────────────────
+    const fechaEvento = new Date(
+      FECHA_EVENTO.año,
+      FECHA_EVENTO.mes - 1,
+      FECHA_EVENTO.dia,
+      FECHA_EVENTO.hora,
+      FECHA_EVENTO.minuto,
+      0,
+    ).getTime();
+
+    function actualizar() {
+      const diff = fechaEvento - new Date().getTime();
+      const val = diff > 0 ? diff : 0;
+      const d = Math.floor(val / 86400000);
+      const h = Math.floor((val % 86400000) / 3600000);
+      const m = Math.floor((val % 3600000) / 60000);
+      const s = Math.floor((val % 60000) / 1000);
+      document.getElementById("dias")!.textContent = String(d).padStart(2, "0");
+      document.getElementById("horas")!.textContent = String(h).padStart(2, "0");
+      document.getElementById("minutos")!.textContent = String(m).padStart(
+        2,
+        "0",
+      );
+      document.getElementById("segundos")!.textContent = String(s).padStart(
+        2,
+        "0",
+      );
+    }
+
+    actualizar();
+    setInterval(actualizar, 1000);
+  };
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initContador);
+  } else {
+    initContador();
+  }
+</script>

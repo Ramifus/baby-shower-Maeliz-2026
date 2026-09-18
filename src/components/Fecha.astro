@@ -1,0 +1,379 @@
+---
+// src/components/Fecha.astro
+// Fecha del evento: el año arriba entre mariposas, la fila día · número · mes
+// entre líneas finas y la hora debajo. Misma estructura de siempre, con la
+// paleta pastel y la tipografía del resto de la invitación: mismo lienzo de
+// ancho fijo y todo en cqw.
+
+const fecha = {
+  dia: "Sábado",
+  numero: "03",
+  mes: "Octubre",
+  anio: "2026",
+  hora: "Hora 14:30",
+};
+
+// El mismo corazoncito que usan los demás bloques.
+const CORAZON =
+  "M10 17 C 1 9.5, 0.5 4, 4.5 1.8 C 7.2 0.3, 9 2.5, 10 4.6 C 11 2.5, 12.8 0.3, 15.5 1.8 C 19.5 4, 19 9.5, 10 17 Z";
+---
+
+<section id="fecha-section">
+  <div id="fe-wrap">
+    <!-- ═══════ RAMOS DE LOS COSTADOS ═══════ -->
+    <!-- El archivo tiene las flores contra el borde izquierdo, así que el de
+         la derecha va volteado. El volteo vive en el CSS y GSAP solo los
+         funde, para no pisarle el transform. -->
+    <img id="fe-lateral-izq" class="fe-lateral" src="/imagenes/lateral2.png" alt="" />
+    <img id="fe-lateral-der" class="fe-lateral" src="/imagenes/lateral2.png" alt="" />
+
+    <!-- ═══════ SEPARADOR ═══════ -->
+    <!-- dos líneas que se desvanecen y el corazón al centro -->
+    <div id="separador-evento">
+      <span class="fe-filete"></span>
+      <svg class="fe-corazon" viewBox="0 0 20 18" aria-hidden="true">
+        <path d={CORAZON}></path>
+      </svg>
+      <span class="fe-filete fe-filete-der"></span>
+    </div>
+
+    <!-- ═══════ INVITACIÓN ═══════ -->
+    <div id="invita-evento">
+      <p class="font-halfterm">Acompáñanos a celebrar el día</p>
+    </div>
+
+    <!-- ═══════ AÑO ═══════ -->
+    <!-- Una mariposa a cada lado, las dos mirando al año: por eso la de la
+         izquierda usa el archivo que mira a la derecha y viceversa. No se
+         voltea nada por CSS, que el transform se lo comería GSAP al hacerlas
+         revolotear. -->
+    <div id="anio-evento">
+      <span class="fe-mariposa" id="mariposa-anio-izq">
+        <img src="/imagenes/mariposa.png" alt="" />
+      </span>
+
+      <p id="fe-anio" class="font-halfterm">{fecha.anio}</p>
+
+      <span class="fe-mariposa" id="mariposa-anio-der">
+        <img src="/imagenes/mariposaizq.png" alt="" />
+      </span>
+    </div>
+
+    <!-- ═══════ DÍA · NÚMERO · MES ═══════ -->
+    <div id="fecha-evento">
+      <!-- DÍA, entre dos líneas finas -->
+      <div class="fe-col">
+        <span class="fe-raya"></span>
+        <span class="fe-lado font-halfterm">{fecha.dia}</span>
+        <span class="fe-raya"></span>
+      </div>
+
+      <!-- el número, en grande al centro -->
+      <div class="fe-centro">
+        <span class="fe-numero font-halfterm">{fecha.numero}</span>
+      </div>
+
+      <!-- MES, entre dos líneas finas -->
+      <div class="fe-col">
+        <span class="fe-raya"></span>
+        <span class="fe-lado font-halfterm">{fecha.mes}</span>
+        <span class="fe-raya"></span>
+      </div>
+    </div>
+
+    <!-- ═══════ HORA ═══════ -->
+    <div id="hora-evento">
+      <p class="font-halfterm">{fecha.hora}</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  #fecha-section {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    overflow-x: hidden;
+    background: transparent;
+    padding: 4cqw 0 2cqw;
+  }
+
+  /* ═══════ LIENZO ═══════ */
+  #fe-wrap {
+    position: relative;
+    width: min(100vw, 480px);
+    container-type: inline-size;
+    padding: 0 3cqw;
+    text-align: center;
+  }
+
+  #fe-wrap img {
+    display: block;
+    user-select: none;
+    -webkit-user-drag: none;
+    pointer-events: none;
+  }
+
+  /* ── Ramos de los costados ── */
+  /* Van detrás de todo y sangran un poco fuera del lienzo: la sección
+     recorta lo que sobra. */
+  .fe-lateral {
+    position: absolute;
+    top: 50%;
+    width: 26cqw;
+    height: auto;
+    z-index: 0;
+  }
+
+  #fe-lateral-izq {
+    left: -6cqw;
+    transform: translateY(-50%);
+  }
+
+  #fe-lateral-der {
+    right: -6cqw;
+    transform: translateY(-50%) scaleX(-1);
+  }
+
+  /* el texto siempre por encima de los ramos: sin position propia quedaría
+     pintado debajo de ellos */
+  #separador-evento,
+  #invita-evento,
+  #anio-evento,
+  #fecha-evento,
+  #hora-evento {
+    position: relative;
+    z-index: 2;
+  }
+
+  /* ── Separador ── */
+  #separador-evento {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3cqw;
+    margin-bottom: 5cqw;
+  }
+
+  /* la línea nace transparente y se va tiñendo hacia el corazón */
+  .fe-filete {
+    display: block;
+    width: 18cqw;
+    height: 1px;
+    background-image: linear-gradient(
+      to right,
+      rgba(169, 192, 141, 0),
+      var(--verde-suave)
+    );
+  }
+
+  .fe-filete-der {
+    background-image: linear-gradient(
+      to left,
+      rgba(169, 192, 141, 0),
+      var(--verde-suave)
+    );
+  }
+
+  .fe-corazon {
+    flex: none;
+    width: 4.2cqw;
+    height: auto;
+    fill: var(--rosa-bebe);
+  }
+
+  /* ── Invitación ── */
+  #invita-evento p {
+    margin: 0 auto 4cqw;
+    max-width: 86cqw;
+    font-size: 7.6cqw;
+    line-height: 1.5;
+    font-weight: 400;
+    color: var(--fucsia-texto);
+  }
+
+  /* ── Año entre mariposas ── */
+  #anio-evento {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9cqw;
+    margin-bottom: 4cqw;
+  }
+
+  .fe-mariposa {
+    display: block;
+    flex: none;
+    width: 13cqw;
+  }
+
+  .fe-mariposa img {
+    width: 100%;
+    height: auto;
+  }
+
+  #fe-anio {
+    margin: 0;
+    font-size: 10cqw;
+    line-height: 1;
+    font-weight: 400;
+    color: var(--verde-texto);
+  }
+
+  /* ── Día · número · mes ── */
+  #fecha-evento {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2cqw;
+  }
+
+  .fe-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 30cqw;
+  }
+
+  /* las rayas finas de arriba y abajo del día y del mes */
+  .fe-raya {
+    display: block;
+    width: 100%;
+    height: 1px;
+    background-image: linear-gradient(var(--rosa-bebe), var(--rosa-bebe));
+  }
+
+  .fe-lado {
+    display: block;
+    padding: 1.6cqw 0;
+    font-size: 7.6cqw;
+    line-height: 1.2;
+    font-weight: 400;
+    color: var(--beige-texto);
+  }
+
+  .fe-centro {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 20cqw;
+  }
+
+  .fe-numero {
+    font-size: 26cqw;
+    line-height: 1;
+    font-weight: 400;
+    color: var(--fucsia-texto);
+  }
+
+  /* ── Hora ── */
+  #hora-evento p {
+    margin: 4cqw 0 0;
+    font-size: 8.6cqw;
+    line-height: 1.2;
+    font-weight: 400;
+    color: var(--beige-texto);
+  }
+</style>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- 🎬 ANIMACIONES CON GSAP                                     -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  if (typeof window !== "undefined") {
+    document.addEventListener("DOMContentLoaded", () => {
+      const mariposas = ["#mariposa-anio-izq", "#mariposa-anio-der"];
+
+      const inicial = () => {
+        // corta el revoloteo y deja las mariposas en su sitio
+        gsap.killTweensOf(mariposas);
+        gsap.set(mariposas, { x: 0, y: 0, rotation: 0 });
+        // cada bloque llega desde un sitio distinto
+        gsap.set("#separador-evento", { opacity: 0, scaleX: 0.3 });
+        gsap.set("#invita-evento", { opacity: 0, y: -22 });
+        gsap.set("#anio-evento", { opacity: 0, x: -38 });
+        gsap.set("#fecha-evento", { opacity: 0, x: 38, scale: 0.96 });
+        gsap.set("#hora-evento", { opacity: 0, y: 26 });
+        // los ramos solo se funden: el centrado y el volteo los lleva el
+        // CSS, así GSAP no les pisa el transform
+        gsap.set(".fe-lateral", { opacity: 0 });
+      };
+
+      inicial();
+
+      ScrollTrigger.create({
+        trigger: "#separador-evento",
+        start: "top 85%",
+        onEnter: () => {
+          const tl = gsap.timeline();
+          tl.to(
+            ".fe-lateral",
+            { opacity: 1, duration: 1.6, ease: "power2.out" },
+            0,
+          )
+            .to(
+              "#separador-evento",
+              { opacity: 1, scaleX: 1, duration: 1.3, ease: "power3.out" },
+              0,
+            )
+            .to(
+              "#invita-evento",
+              { opacity: 1, y: 0, duration: 1.3, ease: "power3.out" },
+              0.1,
+            )
+            .to(
+              "#anio-evento",
+              { opacity: 1, x: 0, duration: 1.4, ease: "power3.out" },
+              0.2,
+            )
+            .to(
+              "#fecha-evento",
+              {
+                opacity: 1,
+                x: 0,
+                scale: 1,
+                duration: 1.4,
+                ease: "back.out(1.2)",
+              },
+              0.3,
+            )
+            .to(
+              "#hora-evento",
+              { opacity: 1, y: 0, duration: 1.3, ease: "power3.out" },
+              0.4,
+            )
+            // Las mariposas quedan revoloteando: sube y baja, con un pelín
+            // de deriva y giro, cada una a su ritmo para que no vayan a la par.
+            .add(() => {
+              gsap.to("#mariposa-anio-izq", {
+                y: -15,
+                x: -7,
+                rotation: -11,
+                duration: 2.2,
+                repeat: -1,
+                yoyo: true,
+                ease: "sine.inOut",
+              });
+              gsap.to("#mariposa-anio-der", {
+                y: -14,
+                x: 7,
+                rotation: 11,
+                duration: 2.7,
+                repeat: -1,
+                yoyo: true,
+                ease: "sine.inOut",
+                delay: 0.4,
+              });
+            }, 1.6);
+        },
+        onLeaveBack: inicial,
+      });
+    });
+  }
+</script>

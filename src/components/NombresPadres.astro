@@ -1,0 +1,500 @@
+---
+// src/components/NombresPadres.astro
+// "Mis papás": el título con su filete, los nombres apilados y la invitación.
+// A propósito NO repite el cartelito rosa de la bienvenida: acá el título va
+// entre dos líneas finas y los nombres se leen uno debajo del otro.
+// Mismo lienzo de ancho fijo que el resto y todo en cqw.
+
+const mama = "Barbarita Hurtado";
+const papa = "Víctor Tito";
+
+// El corazoncito se dibuja una sola vez y se reutiliza en todos los adornos.
+const CORAZON =
+  "M10 17 C 1 9.5, 0.5 4, 4.5 1.8 C 7.2 0.3, 9 2.5, 10 4.6 C 11 2.5, 12.8 0.3, 15.5 1.8 C 19.5 4, 19 9.5, 10 17 Z";
+
+// Corazones sueltos que bordean el texto: cada uno con su tono, su tamaño y
+// su propio ritmo de latido, para que no palpiten todos a la vez. Solo tonos
+// claros: los fuertes saturan el bloque.
+const corazones = [
+  { top: "3cqw", left: "5cqw", size: "3cqw", color: "var(--rosa-bebe)", dur: "3.1s", delay: "0.6s" },
+  { top: "8cqw", right: "6cqw", size: "2.6cqw", color: "#f3b9c6", dur: "2.7s", delay: "0.3s" },
+  { top: "44cqw", left: "3cqw", size: "2.8cqw", color: "var(--amarillo-pastel)", dur: "3.4s", delay: "1.2s" },
+  { top: "50cqw", right: "4cqw", size: "3cqw", color: "#f3b9c6", dur: "2.9s", delay: "0.9s" },
+];
+---
+
+<section id="padres-section">
+  <div id="np-wrap">
+    <!-- ═══════ ESQUINAS DE ARRIBA ═══════ -->
+    <!-- la misma rama en las dos esquinas, espejada a la derecha -->
+    <img id="np-flor-izq" class="np-flor" src="/imagenes/florlateral.png" alt="" />
+    <img id="np-flor-der" class="np-flor" src="/imagenes/florlateral.png" alt="" />
+
+    <!-- ═══════ TÍTULO ═══════ -->
+    <!-- Entre dos líneas finas y con el chupón colgando de una: nada de
+         cartel rosa, que es lo de la bienvenida. -->
+    <div id="np-titulo">
+      <img id="np-chupon" src="/imagenes/chupon.png" alt="" />
+
+      <svg class="np-filete" viewBox="0 0 100 6" aria-hidden="true">
+        <path d="M0 3 H 92" stroke="currentColor" stroke-width="0.9" stroke-linecap="round" fill="none"></path>
+        <circle cx="97" cy="3" r="2" fill="currentColor"></circle>
+      </svg>
+
+      <p id="np-titulo-texto" class="font-halfterm">Mis papás</p>
+
+      <svg class="np-filete np-filete-der" viewBox="0 0 100 6" aria-hidden="true">
+        <path d="M0 3 H 92" stroke="currentColor" stroke-width="0.9" stroke-linecap="round" fill="none"></path>
+        <circle cx="97" cy="3" r="2" fill="currentColor"></circle>
+      </svg>
+    </div>
+
+    <!-- ═══════ NOMBRES + MENSAJE ═══════ -->
+    <!-- Los juguetes y los corazones se miden contra este bloque, así
+         acompañan al texto vaya donde vaya. -->
+    <div id="np-texto">
+      <img id="np-mamadera" src="/imagenes/mamadera.png" alt="" />
+      <img id="np-sonajera" src="/imagenes/sonajera.png" alt="" />
+
+      {
+        corazones.map((c) => (
+          <svg
+            class="np-latido"
+            viewBox="0 0 20 18"
+            aria-hidden="true"
+            style={`top:${c.top}; ${c.left ? `left:${c.left};` : `right:${c.right};`} width:${c.size}; color:${c.color}; animation-duration:${c.dur}; animation-delay:${c.delay};`}
+          >
+            <path d={CORAZON} fill="currentColor" />
+          </svg>
+        ))
+      }
+
+      <!-- los nombres se leen uno debajo del otro, con el corazón de nexo -->
+      <div id="np-nombres" class="font-halfterm">
+        <p class="np-nombre">{mama}</p>
+        <svg id="np-nexo" viewBox="0 0 20 18" aria-hidden="true">
+          <path d={CORAZON}></path>
+        </svg>
+        <p class="np-nombre">{papa}</p>
+      </div>
+
+      <!-- El recuadro: fondo crema, borde fino redondeado y su adorno
+           centrado arriba. Adentro va el mensaje. -->
+      <div id="np-recuadro">
+        <!-- el moño con flores va montado sobre el borde de arriba -->
+        <img id="np-separador" src="/imagenes/separador.png" alt="" />
+
+        <p id="np-mensaje" class="font-halfterm">
+          queremos invitarte a compartir con nosotros este momento tan
+          especial, mientras esperamos con mucha ilusión la llegada de
+          <span class="np-destacado">nuestra princesa Maeliz.</span>
+        </p>
+
+        <!-- corazoncito al pie, cerrando el marco -->
+        <svg id="np-cierre" viewBox="0 0 20 18" aria-hidden="true">
+          <path d={CORAZON}></path>
+        </svg>
+      </div>
+    </div>
+
+    <!-- ═══════ JARDÍN + PATO ═══════ -->
+    <!-- El jardín va en flujo y es quien le da el alto al pie; el pato se
+         apoya encima, medido desde abajo para que siempre pise el pasto. -->
+    <div id="np-pie">
+      <img id="np-abajo2" src="/imagenes/abajo2.png" alt="" />
+      <img id="np-pato" src="/imagenes/pato.png" alt="" />
+    </div>
+  </div>
+</section>
+
+<style>
+  #padres-section {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    overflow-x: hidden;
+    background: transparent;
+    /* sin aire abajo: el jardín cierra la sección pegado al borde */
+    padding: 0;
+  }
+
+  /* ═══════ LIENZO ═══════ */
+  #np-wrap {
+    position: relative;
+    width: min(100vw, 480px);
+    container-type: inline-size;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* reserva el sitio de las ramas de las esquinas y el aire del chupón */
+    padding-top: 36cqw;
+  }
+
+  #np-wrap img {
+    display: block;
+    user-select: none;
+    -webkit-user-drag: none;
+    pointer-events: none;
+  }
+
+  /* ── Esquinas de flores ── */
+  /* Más chicas que las de la bienvenida y las dos iguales: acompañan sin
+     repetir esa composición. */
+  .np-flor {
+    position: absolute;
+    top: 0;
+    width: 36cqw;
+    height: auto;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  #np-flor-izq {
+    left: 0;
+  }
+
+  #np-flor-der {
+    right: 0;
+    transform: scaleX(-1);
+  }
+
+  /* ── Título entre filetes ── */
+  #np-titulo {
+    position: relative;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3cqw;
+    width: 84cqw;
+  }
+
+  #np-titulo-texto {
+    margin: 0;
+    flex: none;
+    font-size: 8cqw;
+    line-height: 1.2;
+    white-space: nowrap;
+    color: var(--fucsia-texto);
+  }
+
+  /* la línea nace del borde y termina en un puntito, mirando al título */
+  .np-filete {
+    flex: 1;
+    height: auto;
+    color: var(--verde-suave);
+    transform: scaleX(-1);
+  }
+
+  .np-filete-der {
+    transform: none;
+  }
+
+  /* cuelga del filete de la izquierda, ladeado */
+  #np-chupon {
+    position: absolute;
+    width: 13cqw;
+    height: auto;
+    bottom: 100%;
+    left: 8cqw;
+    margin-bottom: 1cqw;
+    transform: rotate(-14deg);
+    transform-origin: bottom center;
+    z-index: 2;
+  }
+
+  /* ═══════ NOMBRES + MENSAJE ═══════ */
+  #np-texto {
+    position: relative;
+    width: 94cqw;
+    margin-top: 6cqw;
+    text-align: center;
+  }
+
+  /* ── Nombres apilados ── */
+  #np-nombres {
+    position: relative;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.6cqw;
+  }
+
+  .np-nombre {
+    margin: 0;
+    /* el nombre puede bajar de renglón: achicarlo hasta que entre en uno
+       solo lo vuelve ilegible */
+    font-size: 9cqw;
+    line-height: 1.25;
+    font-weight: 400;
+    color: var(--fucsia-texto);
+  }
+
+  /* el corazón que hace de nexo entre los dos nombres */
+  #np-nexo {
+    width: 4.4cqw;
+    height: auto;
+    fill: var(--rosa-bebe);
+  }
+
+  /* ── Recuadro del mensaje ── */
+  #np-recuadro {
+    position: relative;
+    z-index: 3;
+    width: 82cqw;
+    /* el margen de arriba deja pasar el moño, que sobresale del borde */
+    margin: 14cqw auto 0;
+    padding: 9cqw 6cqw 8cqw;
+    /* el crema va como imagen: el modo oscuro forzado oscurece colores,
+       pero respeta las imágenes */
+    background-image: linear-gradient(#fdf3f1, #fdf3f1);
+    border: 1px solid #f0d7d6;
+    border-radius: 5cqw;
+    box-shadow: 0 3px 14px rgba(200, 165, 155, 0.18);
+  }
+
+  /* el pespunte del marco: una línea cortada por dentro del borde */
+  #np-recuadro::before {
+    content: "";
+    position: absolute;
+    inset: 2cqw;
+    border: 1px dashed #e9c3c4;
+    border-radius: 3.4cqw;
+    pointer-events: none;
+  }
+
+  /* el moño con flores, centrado y montado sobre el borde de arriba */
+  #np-separador {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 50cqw;
+    height: auto;
+    /* la mitad del moño queda por encima del marco */
+    transform: translate(-50%, -55%);
+    z-index: 4;
+  }
+
+  /* el corazoncito que cierra el marco, al pie */
+  #np-cierre {
+    display: block;
+    width: 4cqw;
+    height: auto;
+    margin: 4cqw auto 0;
+    fill: var(--rosa-bebe);
+  }
+
+  #np-mensaje {
+    margin: 0;
+    font-size: 5.6cqw;
+    line-height: 1.75;
+    font-weight: 400;
+    color: var(--beige-texto);
+  }
+
+  /* lo único que cambia de color es el nombre de la bebé */
+  .np-destacado {
+    color: var(--fucsia-texto);
+  }
+
+  /* ── Juguetes a los costados ── */
+  /* Van fuera del ancho del texto, que llega hasta 76cqw de los 94 del
+     bloque: a los costados queda el aire justo para ellos. */
+  #np-mamadera {
+    position: absolute;
+    width: 8cqw;
+    height: auto;
+    top: 20cqw;
+    left: 0;
+    transform: rotate(-12deg);
+    transform-origin: bottom center;
+    z-index: 2;
+  }
+
+  #np-sonajera {
+    position: absolute;
+    width: 12cqw;
+    height: auto;
+    top: 24cqw;
+    right: 0;
+    transform: rotate(10deg);
+    transform-origin: bottom center;
+    z-index: 2;
+  }
+
+  /* ── Jardín de abajo + pato ── */
+  #np-pie {
+    position: relative;
+    width: 100%;
+    /* el jardín sube hasta montarse sobre el pie del marco: el borde de
+       arriba de la imagen es transparente, así que lo que pisa no se ve */
+    margin-top: -24cqw;
+    z-index: 4;
+  }
+
+  #np-abajo2 {
+    width: 100%;
+    height: auto;
+    pointer-events: none;
+    /* el pasto termina de golpe: los últimos milímetros se desvanecen para
+       que no se vea la línea del recorte */
+    -webkit-mask-image: linear-gradient(
+      to bottom,
+      #000 88%,
+      rgba(0, 0, 0, 0.55) 95%,
+      transparent 100%
+    );
+    mask-image: linear-gradient(
+      to bottom,
+      #000 88%,
+      rgba(0, 0, 0, 0.55) 95%,
+      transparent 100%
+    );
+  }
+
+  #np-pato {
+    position: absolute;
+    /* medido desde abajo: siempre apoyado sobre el pasto */
+    bottom: 2cqw;
+    left: 8cqw;
+    width: 33cqw;
+    height: auto;
+    z-index: 3;
+    pointer-events: none;
+  }
+
+  /* ── Corazoncitos que laten alrededor del texto ── */
+  /* La posición, el tamaño, el tono y el ritmo salen del listado de arriba:
+     acá va solo lo que comparten todos. */
+  .np-latido {
+    position: absolute;
+    height: auto;
+    z-index: 2;
+    pointer-events: none;
+    animation-name: latir-np;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+  }
+
+  @keyframes latir-np {
+    from {
+      transform: scale(1);
+    }
+    to {
+      transform: scale(1.22);
+    }
+  }
+</style>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+  gsap.registerPlugin(ScrollTrigger);
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const inicial = () => {
+      gsap.set("#np-titulo-texto", { opacity: 0, y: 14 });
+      gsap.set(".np-filete", { opacity: 0 });
+      gsap.set(".np-nombre", { opacity: 0, y: 18 });
+      gsap.set("#np-nexo", { opacity: 0, scale: 0.5 });
+      gsap.set("#np-recuadro", { opacity: 0, y: 16 });
+      gsap.set("#np-cierre", { opacity: 0, scale: 0.5 });
+      gsap.set("#np-pato", { opacity: 0, y: 14 });
+      // las ramas, los juguetes, el moño y los corazones solo se funden: el
+      // latido, el espejado, el centrado y la inclinación los lleva el CSS,
+      // así GSAP no les pisa el transform
+      gsap.set(
+        [
+          ".np-flor",
+          "#np-chupon",
+          "#np-mamadera",
+          "#np-sonajera",
+          ".np-latido",
+          "#np-separador",
+          "#np-abajo2",
+        ],
+        { opacity: 0 },
+      );
+    };
+
+    inicial();
+
+    ScrollTrigger.create({
+      trigger: "#padres-section",
+      start: "top 80%",
+      onEnter: () => {
+        const tl = gsap.timeline();
+        tl.to(".np-flor", { opacity: 1, duration: 1.5, ease: "power2.out" }, 0)
+          .to(
+            "#np-titulo-texto",
+            { opacity: 1, y: 0, duration: 1.1, ease: "power2.out" },
+            0.15,
+          )
+          // los filetes se abren hacia afuera desde el título
+          .to(
+            ".np-filete",
+            { opacity: 1, duration: 1, ease: "power2.out" },
+            0.3,
+          )
+          .to(
+            ".np-nombre",
+            {
+              opacity: 1,
+              y: 0,
+              duration: 1.2,
+              stagger: 0.15,
+              ease: "power2.out",
+            },
+            0.4,
+          )
+          .to(
+            "#np-nexo",
+            { opacity: 1, scale: 1, duration: 0.9, ease: "back.out(1.8)" },
+            0.7,
+          )
+
+          .to(
+            "#np-recuadro",
+            { opacity: 1, y: 0, duration: 1.2, ease: "power2.out" },
+            0.8,
+          )
+          // el moño aparece una vez que el marco ya está puesto
+          .to(
+            "#np-separador",
+            { opacity: 1, duration: 1, ease: "power2.out" },
+            1.05,
+          )
+          .to(
+            "#np-cierre",
+            { opacity: 1, scale: 1, duration: 0.8, ease: "back.out(1.8)" },
+            1.15,
+          )
+          .to(
+            [
+              "#np-chupon",
+              "#np-mamadera",
+              "#np-sonajera",
+              ".np-latido",
+            ],
+            { opacity: 1, duration: 1.1, stagger: 0.08, ease: "power2.out" },
+            0.95,
+          )
+          // el jardín y el pato cierran la escena
+          .to(
+            "#np-abajo2",
+            { opacity: 1, duration: 1.3, ease: "power2.out" },
+            0.9,
+          )
+          .to(
+            "#np-pato",
+            { opacity: 1, y: 0, duration: 1.1, ease: "power2.out" },
+            1.2,
+          );
+      },
+      onLeaveBack: inicial,
+    });
+  });
+</script>

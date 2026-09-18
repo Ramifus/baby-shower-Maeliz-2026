@@ -1,0 +1,623 @@
+---
+// src/components/NombresFlores.astro
+// Bienvenida — jardín con flores arriba, césped abajo y el pato al frente
+// Mismo lienzo de ancho fijo que la Portada: todo en cqw para que se vea
+// igual en celular, laptop y PC.
+//
+// Orden: esquinas de flores · texto · césped con el pato encima
+
+// El corazoncito se dibuja una sola vez y se reutiliza en todos los adornos.
+const CORAZON =
+  "M10 17 C 1 9.5, 0.5 4, 4.5 1.8 C 7.2 0.3, 9 2.5, 10 4.6 C 11 2.5, 12.8 0.3, 15.5 1.8 C 19.5 4, 19 9.5, 10 17 Z";
+
+// Corazones sueltos que bordean el mensaje: cada uno con su tono, su tamaño
+// y su propio ritmo de latido, para que no palpiten todos a la vez.
+// Van solo donde el texto deja blanco: a los costados del primer renglón y
+// del último, que son los cortos, y debajo del mensaje. Los renglones del
+// medio ocupan casi todo el ancho y ahí no entra nada.
+const corazonesMensaje = [
+  { top: "4cqw", left: "15cqw", size: "3cqw", color: "var(--rosa-bebe)", dur: "3.1s", delay: "0.6s" },
+  { top: "3cqw", right: "14cqw", size: "2.8cqw", color: "#f3b9c6", dur: "2.7s", delay: "0.3s" },
+  { top: "54cqw", left: "12cqw", size: "2.6cqw", color: "var(--amarillo-pastel)", dur: "3.4s", delay: "0.9s" },
+  { top: "51cqw", right: "19cqw", size: "3cqw", color: "#f3b9c6", dur: "3.2s", delay: "0.4s" },
+];
+
+// Y otros tantos sobre el césped, en el claro que queda entre el pato y el
+// borde derecho.
+const corazonesCesped = [
+  { top: "29cqw", left: "61cqw", size: "2.8cqw", color: "var(--rosa-bebe)", dur: "3.3s", delay: "1.2s" },
+  { top: "40cqw", left: "34cqw", size: "3cqw", color: "#f3b9c6", dur: "2.9s", delay: "0.7s" },
+  { top: "25cqw", left: "73cqw", size: "2.4cqw", color: "var(--amarillo-pastel)", dur: "3.1s", delay: "1.6s" },
+];
+---
+
+<section id="nombres-flores">
+  <div id="nf-marco">
+    <!-- ═══════ ESQUINAS DE ARRIBA ═══════ -->
+    <img id="nf-flor-izq" src="/imagenes/florlateral.png" alt="" />
+    <img id="nf-esquina-der" src="/imagenes/esquinaderecha.png" alt="" />
+
+    <!-- ═══════ TEXTO CENTRAL ═══════ -->
+    <div id="nf-texto">
+      <!-- El cartelito es una imagen: la píldora conserva su proporción y
+           el texto va centrado encima. -->
+      <div id="nf-saludo">
+        <!-- la sonajera flota sobre el cartelito -->
+        <img id="nf-sonajera" class="nf-juguete" src="/imagenes/sonajera.png" alt="" />
+        <img id="nf-saludo-fondo" src="/imagenes/rectangulo.png" alt="" />
+        <p id="nf-saludo-texto" class="font-halfterm">
+          <svg class="nf-corazon-nombre" viewBox="0 0 20 18" aria-hidden="true">
+            <path
+              d="M10 17 C 1 9.5, 0.5 4, 4.5 1.8 C 7.2 0.3, 9 2.5, 10 4.6 C 11 2.5, 12.8 0.3, 15.5 1.8 C 19.5 4, 19 9.5, 10 17 Z"
+            ></path>
+          </svg>
+          <span>Hola, soy Maeliz...</span>
+          <svg class="nf-corazon-nombre" viewBox="0 0 20 18" aria-hidden="true">
+            <path
+              d="M10 17 C 1 9.5, 0.5 4, 4.5 1.8 C 7.2 0.3, 9 2.5, 10 4.6 C 11 2.5, 12.8 0.3, 15.5 1.8 C 19.5 4, 19 9.5, 10 17 Z"
+            ></path>
+          </svg>
+        </p>
+      </div>
+
+      <!-- El mensaje y todo lo que lo rodea: los juguetes y los corazones
+           se miden contra este bloque, así acompañan al texto. -->
+      <div id="nf-mensaje-wrap">
+        <img id="nf-chupon" class="nf-juguete" src="/imagenes/chupon.png" alt="" />
+        <img id="nf-mamadera" class="nf-juguete" src="/imagenes/mamadera.png" alt="" />
+
+        {
+          corazonesMensaje.map((c) => (
+            <svg
+              class="nf-latido"
+              viewBox="0 0 20 18"
+              aria-hidden="true"
+              style={`top:${c.top}; ${c.left ? `left:${c.left};` : `right:${c.right};`} width:${c.size}; color:${c.color}; animation-duration:${c.dur}; animation-delay:${c.delay};`}
+            >
+              <path d={CORAZON} fill="currentColor" />
+            </svg>
+          ))
+        }
+
+        <!-- cada renglón toma un tono distinto de la paleta pastel -->
+        <p id="nf-mensaje" class="font-halfterm">
+          <span class="nf-rosa">Sé que aún no me conoces,</span><br />
+          <span class="nf-verde">pero ya estoy rodeada de muchísimo amor.</span><br />
+          <span class="nf-beige">Muy pronto llegaré para llenar de alegría</span><br />
+          <span class="nf-rosa">los corazones de quienes me esperan</span><br />
+          <span class="nf-verde">con tanto amor.</span>
+        </p>
+
+      </div>
+
+      <!-- corazoncitos sueltos a los costados del saludo -->
+      <svg class="nf-corazon nf-corazon-izq" viewBox="0 0 20 18" aria-hidden="true">
+        <path
+          d="M10 17 C 1 9.5, 0.5 4, 4.5 1.8 C 7.2 0.3, 9 2.5, 10 4.6 C 11 2.5, 12.8 0.3, 15.5 1.8 C 19.5 4, 19 9.5, 10 17 Z"
+        ></path>
+      </svg>
+      <svg class="nf-corazon nf-corazon-der" viewBox="0 0 20 18" aria-hidden="true">
+        <path
+          d="M10 17 C 1 9.5, 0.5 4, 4.5 1.8 C 7.2 0.3, 9 2.5, 10 4.6 C 11 2.5, 12.8 0.3, 15.5 1.8 C 19.5 4, 19 9.5, 10 17 Z"
+        ></path>
+      </svg>
+    </div>
+
+    <!-- ═══════ CÉSPED + PATO ═══════ -->
+    <!-- El césped va en flujo y es quien le da el alto al pie; el pato se
+         apoya encima, medido desde abajo para que siempre pise el pasto. -->
+    <div id="nf-pie">
+      <img id="nf-cesped" src="/imagenes/cesped.png" alt="" />
+      <img id="nf-pato" src="/imagenes/pato.png" alt="" />
+
+      {
+        corazonesCesped.map((c) => (
+          <svg
+            class="nf-latido"
+            viewBox="0 0 20 18"
+            aria-hidden="true"
+            style={`top:${c.top}; left:${c.left}; width:${c.size}; color:${c.color}; animation-duration:${c.dur}; animation-delay:${c.delay};`}
+          >
+            <path d={CORAZON} fill="currentColor" />
+          </svg>
+        ))
+      }
+    </div>
+  </div>
+
+  <!-- 🎵 BOTÓN FLOTANTE DE MÚSICA -->
+  <div
+    class="fixed bottom-6 right-6 z-[9999]"
+    id="boton-musica-flotante"
+    style="opacity: 0;"
+  >
+    <button
+      id="toggle-musica-global"
+      class="group relative w-14 h-14 rounded-full shadow-lg flex items-center justify-center transition-all duration-200 hover:scale-110 active:scale-95"
+      style="background: rgba(255,255,255,0.85); backdrop-filter: blur(8px); border: 1px solid rgba(212,122,149,0.55);"
+      aria-label="Controlar música"
+    >
+      <!-- ICONO PAUSE - inicia oculto -->
+      <svg
+        id="icono-pause-global"
+        class="w-6 h-6 hidden relative z-10"
+        style="color: var(--fucsia-suave);"
+        fill="currentColor"
+        viewBox="0 0 20 20"
+      >
+        <path
+          d="M5.5 3.5A1.5 1.5 0 017 2h1a1.5 1.5 0 011.5 1.5v13A1.5 1.5 0 018 18H7a1.5 1.5 0 01-1.5-1.5v-13zm7 0A1.5 1.5 0 0114 2h1a1.5 1.5 0 011.5 1.5v13a1.5 1.5 0 01-1.5 1.5h-1a1.5 1.5 0 01-1.5-1.5v-13z"
+        ></path>
+      </svg>
+
+      <!-- ICONO PLAY - inicia visible -->
+      <svg
+        id="icono-play-global"
+        class="w-6 h-6 relative z-10"
+        style="color: var(--fucsia-suave);"
+        fill="currentColor"
+        viewBox="0 0 20 20"
+      >
+        <path
+          d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z"
+        ></path>
+      </svg>
+
+      <!-- Onda de sonido - inicia oculta -->
+      <div
+        class="absolute -inset-2 rounded-full hidden"
+        style="border: 2px solid rgba(212,122,149,0.55);"
+        id="onda-sonido"
+      >
+      </div>
+    </button>
+  </div>
+</section>
+
+<style>
+  #nombres-flores {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
+    /* deja ver el fondo global estático del Layout */
+    background: transparent;
+  }
+
+  /* ═══════ LIENZO (mismo ancho que la portada) ═══════ */
+  #nf-marco {
+    position: relative;
+    width: min(100vw, 480px);
+    container-type: inline-size;
+    /* La altura la define el contenido, no un aspect-ratio fijo: así la
+       sección termina justo donde termina el césped. El padding de arriba
+       reserva el sitio de las dos esquinas de flores. */
+    padding-top: 45cqw;
+  }
+
+  #nf-marco img {
+    display: block;
+    user-select: none;
+    -webkit-user-drag: none;
+  }
+
+  /* ── Esquinas de flores ── */
+  #nf-flor-izq {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 48cqw;
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  #nf-esquina-der {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 42cqw;
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  /* ── Bloque de texto central ── */
+  /* En flujo normal: es lo que le da la altura a esta parte. */
+  #nf-texto {
+    position: relative;
+    width: 94cqw;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    z-index: 4;
+  }
+
+  /* ── Saludo en su cartelito rosa ── */
+  #nf-saludo {
+    position: relative;
+    width: 88cqw;
+    margin: 5cqw 0 0;
+  }
+
+  #nf-saludo-fondo {
+    width: 100%;
+    height: auto;
+    pointer-events: none;
+    /* el PNG es rosa casi blanco (255,235,225) y sobre el fondo blanco se
+       pierde: la sombra le da el borde que le falta */
+    filter: drop-shadow(0 2px 6px rgba(200, 140, 150, 0.35));
+  }
+
+  /* el texto va centrado sobre la píldora, sin estirarla */
+  #nf-saludo-texto {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* el corazón, el texto y el otro corazón, con su aire entre medio */
+    gap: 2.5cqw;
+    font-size: 8.4cqw;
+    line-height: 1.2;
+    /* el saludo nunca se parte en dos renglones */
+    white-space: nowrap;
+    color: var(--fucsia-texto);
+  }
+
+  /* corazoncitos que flanquean el nombre, dentro de la píldora */
+  .nf-corazon-nombre {
+    flex: none;
+    width: 4.6cqw;
+    height: auto;
+  }
+
+  .nf-corazon-nombre path {
+    fill: var(--rosa-bebe);
+  }
+
+  /* ── Mensaje de la bebé ── */
+  #nf-mensaje-wrap {
+    position: relative;
+    width: 100%;
+  }
+
+  /* ── Juguetes que bordean el mensaje ── */
+  .nf-juguete {
+    position: absolute;
+    height: auto;
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  /* Los tres van en el blanco que dejan el primer renglón y el último, que
+     son los cortos: del segundo al cuarto el texto llega casi al borde. */
+
+  /* a la izquierda del primer renglón */
+  #nf-chupon {
+    width: 10cqw;
+    top: 3cqw;
+    left: 1cqw;
+  }
+
+  /* a la derecha del primer renglón, donde sobra aire */
+  #nf-mamadera {
+    width: 7.5cqw;
+    top: 0;
+    right: 2cqw;
+    transform: rotate(-12deg);
+    transform-origin: bottom center;
+  }
+
+  /* encima del cartelito, centrada y apenas ladeada */
+  #nf-sonajera {
+    width: 14cqw;
+    bottom: 100%;
+    left: 50%;
+    margin-bottom: 9cqw;
+    transform: translateX(-50%) rotate(-15deg);
+    transform-origin: bottom center;
+  }
+
+  /* ── Corazoncitos que laten alrededor del mensaje ── */
+  /* La posición, el tamaño, el tono y el ritmo salen del listado de arriba:
+     acá va solo lo que comparten todos. */
+  .nf-latido {
+    position: absolute;
+    height: auto;
+    z-index: 2;
+    pointer-events: none;
+    animation-name: latir;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+  }
+
+  @keyframes latir {
+    from {
+      transform: scale(1);
+    }
+    to {
+      transform: scale(1.22);
+    }
+  }
+
+  #nf-mensaje {
+    margin: 4cqw 0 0;
+    position: relative;
+    z-index: 3;
+    font-size: 6.4cqw;
+    line-height: 1.75;
+    font-weight: 400;
+  }
+
+  /* los tonos pastel de la paleta, uno por renglón */
+  .nf-rosa {
+    color: var(--fucsia-texto);
+  }
+
+  .nf-verde {
+    color: var(--verde-texto);
+  }
+
+  .nf-beige {
+    color: var(--beige-texto);
+  }
+
+  /* ── Corazoncitos sueltos ── */
+  .nf-corazon path {
+    fill: var(--rosa-bebe);
+  }
+
+  .nf-corazon {
+    position: absolute;
+    width: 4.2cqw;
+    height: auto;
+    z-index: 3;
+    pointer-events: none;
+  }
+
+  /* a los costados del cartelito del saludo */
+  .nf-corazon-izq {
+    top: 2cqw;
+    left: 1cqw;
+  }
+
+  .nf-corazon-der {
+    top: 0.5cqw;
+    right: 2cqw;
+  }
+
+  /* ── Césped + pato ── */
+  #nf-pie {
+    position: relative;
+    width: 100%;
+    /* el césped se solapa con el texto, como en el diseño */
+    margin-top: -16cqw;
+    z-index: 2;
+  }
+
+  #nf-cesped {
+    width: 100%;
+    height: auto;
+    pointer-events: none;
+  }
+
+  #nf-pato {
+    position: absolute;
+    /* medido desde abajo: siempre apoyado sobre el pasto */
+    bottom: 3cqw;
+    left: 20cqw;
+    width: 34cqw;
+    height: auto;
+    z-index: 3;
+    pointer-events: none;
+  }
+
+  /* ── Botón de música ── */
+  #onda-sonido {
+    animation: ping-slow 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+  }
+
+  @keyframes ping-slow {
+    0% {
+      transform: scale(1);
+      opacity: 0.5;
+    }
+    75%,
+    100% {
+      transform: scale(1.3);
+      opacity: 0;
+    }
+  }
+
+  @keyframes pulse-subtle {
+    0%,
+    100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.05);
+    }
+  }
+
+  #boton-musica-flotante button {
+    animation: pulse-subtle 3s ease-in-out infinite;
+  }
+
+  #boton-musica-flotante button:hover {
+    animation: none;
+  }
+</style>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+  gsap.registerPlugin(ScrollTrigger);
+
+  document.addEventListener("DOMContentLoaded", () => {
+    // ── Entrada animada ───────────────────────────────────────
+    // Las esquinas caen desde arriba, el texto se abre desde los costados,
+    // el césped sube desde el pie y el pato aparece al final.
+    const inicial = () => {
+      gsap.set("#nf-flor-izq", { opacity: 0, x: -26, y: -30 });
+      gsap.set("#nf-esquina-der", { opacity: 0, x: 26, y: -30 });
+      gsap.set("#nf-saludo", { opacity: 0, y: 14, scale: 0.94 });
+      gsap.set("#nf-mensaje", { opacity: 0, y: 18 });
+      // los juguetes y los corazoncitos solo aparecen: el latido lo lleva
+      // el CSS, así GSAP no le pisa el transform
+      gsap.set([".nf-juguete", ".nf-latido"], { opacity: 0 });
+      gsap.set(".nf-corazon", { opacity: 0, scale: 0.5 });
+      gsap.set("#nf-cesped", { opacity: 0, y: 40 });
+      gsap.set("#nf-pato", { opacity: 0, y: 34, scale: 0.9 });
+    };
+
+    inicial();
+
+    const latirCorazones = () => {
+      gsap.to(".nf-corazon", {
+        scale: 1.18,
+        duration: 1.5,
+        repeat: -1,
+        yoyo: true,
+        stagger: 0.4,
+        ease: "sine.inOut",
+      });
+    };
+
+    const armarEntrada = () => {
+      ScrollTrigger.create({
+        trigger: "#nombres-flores",
+        start: "top 85%",
+        onEnter: () => {
+          const tl = gsap.timeline();
+          tl.to(
+            ["#nf-flor-izq", "#nf-esquina-der"],
+            { opacity: 1, x: 0, y: 0, duration: 1.6, ease: "power2.out" },
+            0,
+          )
+            .to(
+              "#nf-cesped",
+              { opacity: 1, y: 0, duration: 1.6, ease: "power2.out" },
+              0,
+            )
+            .to(
+              "#nf-saludo",
+              {
+                opacity: 1,
+                y: 0,
+                scale: 1,
+                duration: 1.3,
+                ease: "back.out(1.3)",
+              },
+              0.35,
+            )
+            .to(
+              "#nf-mensaje",
+              { opacity: 1, y: 0, duration: 1.4, ease: "power2.out" },
+              0.5,
+            )
+            .to(
+              [".nf-juguete", ".nf-latido"],
+              { opacity: 1, duration: 1.1, stagger: 0.07, ease: "power2.out" },
+              0.7,
+            )
+            .to(
+              "#nf-pato",
+              {
+                opacity: 1,
+                y: 0,
+                scale: 1,
+                duration: 1.5,
+                ease: "back.out(1.2)",
+              },
+              0.4,
+            )
+            .to(
+              ".nf-corazon",
+              {
+                opacity: 1,
+                scale: 1,
+                duration: 1,
+                stagger: 0.15,
+                ease: "back.out(1.6)",
+              },
+              0.6,
+            )
+            .add(latirCorazones, 2);
+        },
+        // al volver a subir se rearma, así la animación se repite en cada bajada
+        onLeaveBack: () => {
+          gsap.killTweensOf(".nf-corazon");
+          inicial();
+        },
+      });
+
+      ScrollTrigger.refresh();
+    };
+
+    // Esta sección queda detrás de la portada, así que al cargar la página ya
+    // está "en pantalla" y la animación se gastaría sin que nadie la vea.
+    // Por eso se arma recién cuando el invitado abre el sobre. Si la portada
+    // no está en uso, arranca de una.
+    const hayPortada = document.getElementById("portada-section");
+
+    if (!hayPortada || (window as any).invitacionAbierta) {
+      armarEntrada();
+    } else {
+      window.addEventListener("invitacion-abierta", armarEntrada, {
+        once: true,
+      });
+    }
+
+    // ── Botón flotante de música ──────────────────────────────
+    const botonToggle = document.getElementById("toggle-musica-global");
+    const iconoPlay = document.getElementById("icono-play-global");
+    const iconoPause = document.getElementById("icono-pause-global");
+    const ondaSonido = document.getElementById("onda-sonido");
+    const botonFlotante = document.getElementById("boton-musica-flotante");
+
+    if (botonFlotante) botonFlotante.style.opacity = "1";
+
+    // Sincronizar estado visual al cargar (por si la música ya venía corriendo desde Portada)
+    function sincronizarEstadoInicial() {
+      const estadoActual = (window as any).estaReproduciendoGlobal;
+      if (estadoActual) {
+        iconoPlay?.classList.add("hidden");
+        iconoPause?.classList.remove("hidden");
+        ondaSonido?.classList.remove("hidden");
+      }
+    }
+
+    sincronizarEstadoInicial();
+
+    // Portada dispara este evento cuando el invitado toca el sobre
+    window.addEventListener("musica-iniciada", () => {
+      iconoPlay?.classList.add("hidden");
+      iconoPause?.classList.remove("hidden");
+      ondaSonido?.classList.remove("hidden");
+    });
+
+    botonToggle?.addEventListener("click", () => {
+      const audioActual = (window as any).audioGlobal;
+      const estadoActual = (window as any).estaReproduciendoGlobal;
+
+      if (estadoActual && audioActual) {
+        audioActual.pause();
+        (window as any).estaReproduciendoGlobal = false;
+        iconoPause?.classList.add("hidden");
+        iconoPlay?.classList.remove("hidden");
+        ondaSonido?.classList.add("hidden");
+      } else if (audioActual) {
+        audioActual.play().catch(() => {});
+        (window as any).estaReproduciendoGlobal = true;
+        iconoPlay?.classList.add("hidden");
+        iconoPause?.classList.remove("hidden");
+        ondaSonido?.classList.remove("hidden");
+      }
+    });
+  });
+</script>

@@ -1,0 +1,293 @@
+---
+// src/components/Invitado.astro
+// La tarjeta del pase: "Invitación con mucho cariño para" y el nombre del
+// invitado. Mismo marco crema con pespunte y moño que las demás tarjetas.
+//
+// El nombre sale de acá por ahora. Cuando la invitación se conecte al panel
+// de invitados, el sistema escribe dentro de #in-nombre; por eso el texto
+// vive en un solo elemento y no partido en varios.
+const invitado = "Familia Rodríguez Fernández";
+
+// El mismo corazoncito que usan los demás bloques.
+const CORAZON =
+  "M10 17 C 1 9.5, 0.5 4, 4.5 1.8 C 7.2 0.3, 9 2.5, 10 4.6 C 11 2.5, 12.8 0.3, 15.5 1.8 C 19.5 4, 19 9.5, 10 17 Z";
+
+// Corazones sueltos a los costados de la tarjeta, cada uno con su tono, su
+// tamaño y su propio ritmo de latido para que no palpiten todos a la vez.
+const corazones = [
+  { top: "16cqw", left: "2cqw", size: "3cqw", color: "var(--rosa-bebe)", dur: "3.1s", delay: "0.5s" },
+  { top: "30cqw", right: "2.5cqw", size: "2.6cqw", color: "#f3b9c6", dur: "2.7s", delay: "0.2s" },
+  { top: "44cqw", left: "4cqw", size: "2.4cqw", color: "var(--amarillo-pastel)", dur: "3.4s", delay: "1.1s" },
+];
+---
+
+<section id="invitado-section">
+  <div id="in-wrap">
+    <!-- ═══════ TARJETA ═══════ -->
+    <div id="in-card">
+      <!-- el moño con flores, montado sobre el borde de arriba -->
+      <img id="in-mono" src="/imagenes/separador.png" alt="" />
+
+      <p id="in-frase" class="font-halfterm">
+        Invitación con mucho cariño para
+      </p>
+
+      <!-- El nombre va sobre su propia placa blanca: es lo que distingue a
+           esta tarjeta de las demás y lo que el invitado busca de un vistazo.
+           Puede bajar de renglón, que achicarlo hasta que entre en uno solo
+           lo vuelve ilegible. -->
+      <div id="in-pase">
+        <p id="in-nombre" class="font-halfterm">{invitado}</p>
+      </div>
+
+      <!-- corazoncito al pie, cerrando el marco -->
+      <svg id="in-cierre" viewBox="0 0 20 18" aria-hidden="true">
+        <path d={CORAZON}></path>
+      </svg>
+
+      <!-- ramitas en las esquinas de abajo, asomando por fuera del marco -->
+      <img class="in-ramo" id="in-ramo-izq" src="/imagenes/florlateral.png" alt="" />
+      <img class="in-ramo" id="in-ramo-der" src="/imagenes/florlateral.png" alt="" />
+    </div>
+
+    <!-- ═══════ CORAZONES A LOS COSTADOS ═══════ -->
+    {
+      corazones.map((c) => (
+        <svg
+          class="in-latido"
+          viewBox="0 0 20 18"
+          aria-hidden="true"
+          style={`top:${c.top}; ${c.left ? `left:${c.left};` : `right:${c.right};`} width:${c.size}; color:${c.color}; animation-duration:${c.dur}; animation-delay:${c.delay};`}
+        >
+          <path d={CORAZON} fill="currentColor" />
+        </svg>
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  #invitado-section {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    overflow-x: hidden;
+    background: transparent;
+    /* en rem, no en cqw: la sección no es el contenedor de consulta, ese es
+       #in-wrap. Aire abajo para que las ramitas no se peguen a "Recepción". */
+    padding: 1rem 0 3.5rem;
+  }
+
+  #in-wrap {
+    position: relative;
+    width: min(100vw, 480px);
+    container-type: inline-size;
+  }
+
+  #in-wrap img {
+    display: block;
+    user-select: none;
+    -webkit-user-drag: none;
+    pointer-events: none;
+  }
+
+  /* ═══════ TARJETA ═══════ */
+  /* El mismo marco que las otras tarjetas: crema con pespunte por dentro. El
+     crema va como imagen, que el modo oscuro forzado oscurece los colores
+     pero respeta las imágenes. */
+  #in-card {
+    position: relative;
+    z-index: 2;
+    margin: 12cqw 6cqw 0;
+    padding: 12cqw 6cqw 9cqw;
+    text-align: center;
+    /* el mismo crema, pero con una lluvia de puntitos rosas encima: es lo
+       que le da aire propio frente a la tarjeta del contador */
+    background-image: radial-gradient(
+        circle,
+        rgba(233, 195, 196, 0.5) 1px,
+        transparent 1.3px
+      ),
+      linear-gradient(#fdf3f1, #fdf3f1);
+    background-size:
+      22px 22px,
+      auto;
+    border: 1px solid #f0d7d6;
+    /* esquinas más abiertas que las del contador */
+    border-radius: 9cqw;
+    box-shadow: 0 3px 14px rgba(200, 165, 155, 0.18);
+  }
+
+  /* el pespunte, una línea cortada por dentro del borde */
+  #in-card::before {
+    content: "";
+    position: absolute;
+    inset: 2cqw;
+    border: 1px dashed #e9c3c4;
+    border-radius: 7.4cqw;
+    pointer-events: none;
+  }
+
+  /* ── Moño de arriba ── */
+  #in-mono {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 50cqw;
+    height: auto;
+    transform: translate(-50%, -55%);
+    z-index: 3;
+  }
+
+  /* ── Textos ── */
+  #in-frase {
+    position: relative;
+    z-index: 2;
+    margin: 0 auto;
+    max-width: 62cqw;
+    font-size: 5.6cqw;
+    line-height: 1.5;
+    font-weight: 400;
+    color: var(--beige-texto);
+  }
+
+  /* ── Placa del nombre ── */
+  /* Blanca sobre el crema, con su propio pespunte: el nombre queda como
+     pegado encima de la tarjeta. */
+  #in-pase {
+    position: relative;
+    z-index: 2;
+    margin: 4cqw 0 0;
+    padding: 4cqw 4cqw 4.4cqw;
+    background-image: linear-gradient(#ffffff, #ffffff);
+    border: 1px dashed #e9c3c4;
+    border-radius: 4cqw;
+    box-shadow: 0 2px 8px rgba(200, 165, 155, 0.14);
+  }
+
+  #in-nombre {
+    margin: 0;
+    font-size: 9cqw;
+    line-height: 1.25;
+    font-weight: 400;
+    color: var(--fucsia-texto);
+  }
+
+  /* ── Ramitas de las esquinas de abajo ── */
+  /* El archivo es una esquina de arriba a la izquierda, así que cada una va
+     volteada para caer donde le toca. El volteo vive en el CSS y GSAP solo
+     las funde, para no pisarle el transform. */
+  .in-ramo {
+    position: absolute;
+    bottom: -4cqw;
+    width: 24cqw;
+    height: auto;
+    z-index: 1;
+    opacity: 0.95;
+  }
+
+  #in-ramo-izq {
+    left: -5cqw;
+    transform: scaleY(-1);
+  }
+
+  #in-ramo-der {
+    right: -5cqw;
+    transform: scale(-1, -1);
+  }
+
+  /* el corazoncito que cierra el marco, al pie */
+  #in-cierre {
+    position: relative;
+    z-index: 2;
+    display: block;
+    width: 4cqw;
+    height: auto;
+    margin: 4cqw auto 0;
+    fill: var(--rosa-bebe);
+  }
+
+  /* ── Corazoncitos que laten al costado ── */
+  /* La posición, el tamaño, el tono y el ritmo salen del listado de arriba:
+     acá va solo lo que comparten todos. */
+  .in-latido {
+    position: absolute;
+    height: auto;
+    z-index: 1;
+    pointer-events: none;
+    animation-name: latir-in;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+  }
+
+  @keyframes latir-in {
+    from {
+      transform: scale(1);
+    }
+    to {
+      transform: scale(1.22);
+    }
+  }
+</style>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+  gsap.registerPlugin(ScrollTrigger);
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const inicial = () => {
+      gsap.set("#in-card", { opacity: 0, y: 24, scale: 0.97 });
+      gsap.set("#in-frase", { opacity: 0, y: -14 });
+      gsap.set("#in-pase", { opacity: 0, y: 16 });
+      gsap.set("#in-cierre", { opacity: 0, scale: 0.5 });
+      // el moño, las ramitas y los corazones solo se funden: el centrado, el
+      // volteo y el latido los lleva el CSS, así GSAP no les pisa el transform
+      gsap.set(["#in-mono", ".in-ramo", ".in-latido"], { opacity: 0 });
+    };
+
+    inicial();
+
+    ScrollTrigger.create({
+      trigger: "#invitado-section",
+      start: "top 82%",
+      onEnter: () => {
+        const tl = gsap.timeline();
+        tl.to(
+          "#in-card",
+          { opacity: 1, y: 0, scale: 1, duration: 1.1, ease: "power2.out" },
+          0,
+        )
+          .to("#in-mono", { opacity: 1, duration: 1.2, ease: "power2.out" }, 0.2)
+          .to(
+            "#in-frase",
+            { opacity: 1, y: 0, duration: 1.1, ease: "power2.out" },
+            0.35,
+          )
+          .to(
+            "#in-pase",
+            { opacity: 1, y: 0, duration: 1.3, ease: "power2.out" },
+            0.55,
+          )
+          .to(
+            ".in-ramo",
+            { opacity: 0.95, duration: 1.4, stagger: 0.12, ease: "power2.out" },
+            0.4,
+          )
+          .to(
+            "#in-cierre",
+            { opacity: 1, scale: 1, duration: 0.8, ease: "back.out(1.8)" },
+            0.8,
+          )
+          .to(
+            ".in-latido",
+            { opacity: 1, duration: 1.1, stagger: 0.1, ease: "power2.out" },
+            0.9,
+          );
+      },
+      onLeaveBack: inicial,
+    });
+  });
+</script>

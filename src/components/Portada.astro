@@ -1,0 +1,579 @@
+---
+// src/components/Portada.astro
+// Portada Baby Shower — jardín de flores sobre fondo blanco
+// El diseño vive dentro de #marco, un lienzo de proporción fija (480 x 880).
+// Todo se mide en cqw (1cqw = 1% del ancho del marco), así se ve EXACTAMENTE
+// igual en celular, laptop y PC: solo cambia la escala, nunca la composición.
+//
+// Orden vertical: flores laterales · título · sobre · instrucción · pradera
+---
+
+<section id="portada-section">
+    <!-- ═══════════ LIENZO DE PROPORCIÓN FIJA ═══════════ -->
+    <div id="marco">
+        <!-- ── Flores de las dos esquinas de arriba ── -->
+        <img
+            id="flor-izq"
+            class="flor-lateral"
+            src="/imagenes/florlateral.png"
+            alt=""
+        />
+        <img
+            id="flor-der"
+            class="flor-lateral"
+            src="/imagenes/florlateral.png"
+            alt=""
+        />
+
+        <!-- ── Mariposas sueltas ── -->
+        <img id="mariposa-a" class="mariposa" src="/imagenes/mariposa.png" alt="" />
+        <img id="mariposa-b" class="mariposa" src="/imagenes/mariposaizq.png" alt="" />
+        <img id="mariposa-c" class="mariposa" src="/imagenes/mariposa.png" alt="" />
+        <img id="mariposa-d" class="mariposa" src="/imagenes/mariposa.png" alt="" />
+        <!-- las de la derecha usan la versión espejada, para que miren
+             hacia adentro de la invitación -->
+        <img id="mariposa-e" class="mariposa" src="/imagenes/mariposaizq.png" alt="" />
+
+        <!-- ── Título (logo) ── -->
+        <div id="titulo-wrap">
+            <!-- El título va en texto, no en imagen: así "Shower" se lee
+                 derecho (sin cursiva) y se recorta nítido en cualquier
+                 pantalla. Las dos palabras usan Cinzel, ya cargada. -->
+            <div id="logo" class="font-cinzel">
+                <span id="titulo-baby">Baby</span>
+                <span id="titulo-shower" class="font-great-vibes">Shower</span>
+            </div>
+
+            <!-- corazón verde con sus dos líneas, debajo del título -->
+            <svg id="adorno-titulo" viewBox="0 0 200 18" aria-hidden="true">
+                <path
+                    d="M4 12 C 28 4, 56 4, 80 10"
+                    fill="none"
+                    stroke="#8ea86a"
+                    stroke-width="1.4"
+                    stroke-linecap="round"
+                ></path>
+                <path
+                    d="M196 12 C 172 4, 144 4, 120 10"
+                    fill="none"
+                    stroke="#8ea86a"
+                    stroke-width="1.4"
+                    stroke-linecap="round"
+                ></path>
+                <path
+                    d="M100 15 C 92 8, 88 3, 93.5 1.5 C 97 0.5, 99 3, 100 5 C 101 3, 103 0.5, 106.5 1.5 C 112 3, 108 8, 100 15 Z"
+                    fill="none"
+                    stroke="#8ea86a"
+                    stroke-width="1.4"
+                    stroke-linejoin="round"
+                ></path>
+            </svg>
+        </div>
+
+        <!-- ── Sobre + instrucción (clic para abrir) ── -->
+        <div id="sobre-bloque">
+            <div
+                id="sobre-container"
+                role="button"
+                tabindex="0"
+                aria-label="Abrir invitación"
+            >
+                <img src="/imagenes/sobre.png" alt="Sobre de invitación" />
+            </div>
+
+            <p id="instruccion" class="font-cinzel">
+                Haz clic en el sobre <br />para ver la invitación
+            </p>
+
+            <!-- corazón rosa de cierre, debajo de la instrucción -->
+            <svg id="adorno-instruccion" viewBox="0 0 200 14" aria-hidden="true">
+                <path
+                    d="M14 8 H 84"
+                    stroke="#e7b9c4"
+                    stroke-width="1.2"
+                    stroke-linecap="round"
+                ></path>
+                <path
+                    d="M186 8 H 116"
+                    stroke="#e7b9c4"
+                    stroke-width="1.2"
+                    stroke-linecap="round"
+                ></path>
+                <path
+                    d="M100 12.5 C 92.5 6, 89 1.5, 94 0.5 C 97 0, 99 2, 100 3.8 C 101 2, 103 0, 106 0.5 C 111 1.5, 107.5 6, 100 12.5 Z"
+                    fill="#eda9ba"
+                ></path>
+            </svg>
+        </div>
+
+        <!-- ── Pradera del pie ── -->
+        <img id="abajo" src="/imagenes/abajo.png" alt="" />
+    </div>
+</section>
+
+<style is:global>
+    /* Bloquea el scroll mientras la portada está visible */
+    body.portada-activa {
+        overflow: hidden !important;
+        height: 100vh;
+    }
+</style>
+
+<style>
+    #portada-section {
+        position: fixed;
+        inset: 0;
+        z-index: 10000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        /* el blanco va como imagen: el modo oscuro forzado oscurece colores,
+           pero respeta las imágenes */
+        background-image: linear-gradient(#ffffff, #ffffff);
+    }
+
+    /* ═══════════ LIENZO (ancho fijo tipo celular, alto completo) ═══════════ */
+    #marco {
+        position: relative;
+        /* fallback para navegadores sin svh */
+        width: min(100vw, 480px, calc(100vh * 480 / 880));
+        width: min(100vw, 480px, calc(100svh * 480 / 880));
+        height: 100vh;
+        height: 100svh;
+        container-type: size;
+        background-image: linear-gradient(#ffffff, #ffffff);
+        overflow: hidden;
+    }
+
+    #marco img {
+        display: block;
+        user-select: none;
+        -webkit-user-drag: none;
+    }
+
+    /* ── Flores de las esquinas de arriba ── */
+    .flor-lateral {
+        position: absolute;
+        top: 0;
+        width: 42cqw;
+        height: auto;
+        z-index: 2;
+        pointer-events: none;
+    }
+
+    #flor-izq {
+        left: 0;
+    }
+
+    /* la de la derecha es la misma imagen, espejada */
+    #flor-der {
+        right: 0;
+        transform: scaleX(-1);
+    }
+
+    /* ── Mariposas ── */
+    .mariposa {
+        position: absolute;
+        height: auto;
+        z-index: 3;
+        pointer-events: none;
+    }
+
+    /* Repartidas por los huecos en blanco que deja la composición:
+       el centro de arriba, los dos costados del título y la franja que
+       queda entre la instrucción y el pasto. */
+
+    /* centro de arriba, en el claro entre las dos ramas de flores */
+    #mariposa-a {
+        width: 8cqw;
+        top: 12cqw;
+        left: 46cqw;
+    }
+
+    /* costado derecho, a la altura de "Shower" */
+    #mariposa-b {
+        width: 9cqw;
+        top: 57cqw;
+        right: 7cqw;
+    }
+
+    /* costado izquierdo, entre el título y el sobre */
+    #mariposa-c {
+        width: 8cqw;
+        top: 74cqw;
+        left: 6cqw;
+    }
+
+    /* Las dos de abajo van en la franja que queda entre la instrucción y
+       el borde del pasto. El z-index las deja por encima de la pradera,
+       así el césped no las tapa si alguna se estira al flotar. */
+    #mariposa-d,
+    #mariposa-e {
+        z-index: 5;
+    }
+
+    /* Se miden desde abajo, no desde arriba: la pradera está pegada al pie
+       y mide 64.6cqw de alto, así que "bottom" mayor a eso las deja siempre
+       por encima del pasto, sea cual sea el alto de la pantalla. Medidas
+       desde arriba se les montaban al texto en ventanas angostas. */
+
+    /* a la izquierda, ya volando sobre el pasto */
+    #mariposa-d {
+        width: 9cqw;
+        bottom: 54cqw;
+        left: 16cqw;
+    }
+
+    /* a la derecha, ya volando sobre el pasto */
+    #mariposa-e {
+        width: 7.5cqw;
+        bottom: 56cqw;
+        right: 15cqw;
+    }
+
+    /* ── Título (logo) ── */
+    #titulo-wrap {
+        position: absolute;
+        top: 15.5%;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 86cqw;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        z-index: 5;
+        pointer-events: none;
+    }
+
+    #logo {
+        width: 86cqw;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        line-height: 1;
+    }
+
+    #titulo-baby {
+        font-size: 20cqw;
+        font-weight: 600;
+        letter-spacing: 0.05em;
+        /* el espaciado queda colgando después de la última letra y corre la
+           palabra a la izquierda: se compensa con el mismo valor */
+        padding-left: 0.05em;
+        text-transform: uppercase;
+        /* Rosa pastel. No va el --rosa-bebe pelado: sobre el fondo blanco de
+           la portada casi no se lee, así que es el mismo tono un punto más
+           cargado. */
+        color: #efaabb;
+    }
+
+    #titulo-shower {
+        /* Great Vibes: sin mayúsculas forzadas ni espaciado entre letras,
+           esa cursiva no las tolera. Va más grande porque la caja de la
+           letra es chica al lado de la versalita de BABY. */
+        margin-top: -0.5cqw;
+        font-size: 19cqw;
+        font-weight: 400;
+        line-height: 1.1;
+        /* Verde suave en vez del dorado: ese dorado venía de otra plantilla
+           y era el único color de la portada que no estaba en la paleta. */
+        color: var(--verde-suave);
+    }
+
+    #adorno-titulo {
+        width: 32cqw;
+        height: auto;
+        margin-top: 1.6cqw;
+        overflow: visible;
+    }
+
+    /* ── Sobre + instrucción ── */
+    #sobre-bloque {
+        position: absolute;
+        top: 38%;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 82cqw;
+        z-index: 6;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #sobre-container {
+        width: 100%;
+        cursor: pointer;
+        outline: none;
+    }
+
+    #sobre-container img {
+        width: 100%;
+        height: auto;
+    }
+
+    #instruccion {
+        margin: 3.4cqw 0 0;
+        max-width: 72cqw;
+        font-size: 5cqw;
+        font-weight: 500;
+        line-height: 1.45;
+        letter-spacing: 0.055em;
+        text-transform: uppercase;
+        text-align: center;
+        color: #6f8a4e;
+        cursor: pointer;
+    }
+
+    #adorno-instruccion {
+        width: 30cqw;
+        height: auto;
+        margin-top: 2.4cqw;
+        overflow: visible;
+    }
+
+    /* ── Pradera del pie ── */
+    #abajo {
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100%;
+        height: auto;
+        z-index: 4;
+        pointer-events: none;
+    }
+</style>
+
+<script>
+    import { gsap } from "gsap";
+
+    if (typeof window !== "undefined") {
+        document.addEventListener("DOMContentLoaded", () => {
+            document.body.classList.add("portada-activa");
+
+            // ── Estado inicial ──────────────────────────────────────
+            gsap.set("#flor-izq", { opacity: 0, x: -20, y: -16 });
+            gsap.set("#flor-der", { opacity: 0, x: 20, y: -16 });
+            gsap.set("#logo", { opacity: 0, y: -14, scale: 0.94 });
+            gsap.set(["#adorno-titulo", "#adorno-instruccion"], { opacity: 0 });
+            gsap.set("#sobre-container", { opacity: 0, y: 26, scale: 0.9 });
+            gsap.set("#instruccion", { opacity: 0, y: 10 });
+            gsap.set("#abajo", { opacity: 0, y: 26 });
+            gsap.set(".mariposa", { opacity: 0, scale: 0.8 });
+
+            // ── Entrada ─────────────────────────────────────────────
+            const tl = gsap.timeline({ delay: 0.25 });
+
+            tl.to(
+                ["#flor-izq", "#flor-der"],
+                { opacity: 1, x: 0, y: 0, duration: 1.3, ease: "power2.out" },
+                0,
+            )
+                .to(
+                    "#abajo",
+                    { opacity: 1, y: 0, duration: 1.3, ease: "power2.out" },
+                    0,
+                )
+                .to(
+                    "#logo",
+                    {
+                        opacity: 1,
+                        y: 0,
+                        scale: 1,
+                        duration: 1.2,
+                        ease: "back.out(1.4)",
+                    },
+                    0.15,
+                )
+                .to(
+                    "#sobre-container",
+                    {
+                        opacity: 1,
+                        y: 0,
+                        scale: 1,
+                        duration: 1.2,
+                        ease: "back.out(1.4)",
+                    },
+                    0.15,
+                )
+                .to(
+                    "#instruccion",
+                    { opacity: 1, y: 0, duration: 1.2, ease: "power2.out" },
+                    0.15,
+                )
+                .to(
+                    ["#adorno-titulo", "#adorno-instruccion"],
+                    { opacity: 1, duration: 1, ease: "power2.out" },
+                    0.5,
+                )
+                .to(
+                    ".mariposa",
+                    {
+                        opacity: 1,
+                        scale: 1,
+                        duration: 0.9,
+                        stagger: 0.18,
+                        ease: "back.out(1.6)",
+                    },
+                    0.6,
+                );
+
+            // ── Reposo ──────────────────────────────────────────────
+            tl.add(() => {
+                // El sobre late para invitar al toque
+                gsap.to("#sobre-container", {
+                    scale: 1.035,
+                    duration: 1.9,
+                    repeat: -1,
+                    yoyo: true,
+                    ease: "sine.inOut",
+                });
+                gsap.to("#instruccion", {
+                    opacity: 0.62,
+                    duration: 1.4,
+                    repeat: -1,
+                    yoyo: true,
+                    ease: "sine.inOut",
+                });
+                // Las mariposas flotan, cada una a su ritmo
+                gsap.utils.toArray<HTMLElement>(".mariposa").forEach((m, i) => {
+                    gsap.to(m, {
+                        y: i % 2 === 0 ? -10 : -14,
+                        x: i % 2 === 0 ? 6 : -6,
+                        rotation: i % 2 === 0 ? 5 : -5,
+                        duration: 2.6 + i * 0.5,
+                        repeat: -1,
+                        yoyo: true,
+                        ease: "sine.inOut",
+                    });
+                });
+            }, 1.4);
+
+            // ── Hover sobre ─────────────────────────────────────────
+            const sobreContainer = document.getElementById("sobre-container");
+
+            sobreContainer?.addEventListener("mouseenter", () => {
+                gsap.to("#sobre-container", {
+                    y: -8,
+                    scale: 1.06,
+                    duration: 0.3,
+                    ease: "power2.out",
+                });
+            });
+            sobreContainer?.addEventListener("mouseleave", () => {
+                gsap.to("#sobre-container", {
+                    y: 0,
+                    scale: 1,
+                    duration: 0.3,
+                    ease: "power2.out",
+                });
+            });
+
+            // ── Click ───────────────────────────────────────────────
+            const portadaSection = document.getElementById("portada-section");
+
+            const abrirInvitacion = () => {
+                gsap.killTweensOf([
+                    "#logo",
+                    "#sobre-container",
+                    "#instruccion",
+                    "#flor-izq",
+                    "#flor-der",
+                    "#abajo",
+                    ".mariposa",
+                ]);
+
+                const audio = new Audio("/musica/melo.mp3");
+                audio.loop = true;
+                audio.volume = 0.5;
+                audio.play().catch(() => {});
+
+                (window as any).audioGlobal = audio;
+                (window as any).estaReproduciendoGlobal = true;
+                window.dispatchEvent(new CustomEvent("musica-iniciada"));
+
+                const tlSalida = gsap.timeline();
+
+                tlSalida
+                    .to("#sobre-container", {
+                        scale: 1.1,
+                        duration: 0.2,
+                        ease: "power2.in",
+                    })
+                    .to(
+                        [
+                            "#instruccion",
+                            "#adorno-instruccion",
+                            "#logo",
+                            "#adorno-titulo",
+                            ".mariposa",
+                        ],
+                        {
+                            opacity: 0,
+                            y: -16,
+                            duration: 0.4,
+                            stagger: 0.05,
+                            ease: "power2.in",
+                        },
+                        0.1,
+                    )
+                    .to(
+                        ["#flor-izq", "#flor-der"],
+                        { opacity: 0, y: -20, duration: 0.45, ease: "power2.in" },
+                        0.1,
+                    )
+                    .to(
+                        "#abajo",
+                        { opacity: 0, y: 20, duration: 0.45, ease: "power2.in" },
+                        0.1,
+                    )
+                    .to(
+                        "#sobre-container",
+                        {
+                            opacity: 0,
+                            scale: 1.35,
+                            duration: 0.4,
+                            ease: "power2.in",
+                        },
+                        0.3,
+                    )
+                    .to(
+                        portadaSection,
+                        {
+                            opacity: 0,
+                            duration: 0.5,
+                            ease: "power2.in",
+                            onStart: () => {
+                                document.body.classList.remove("portada-activa");
+                            },
+                            onComplete: () => {
+                                portadaSection?.remove();
+                                window.scrollTo({ top: 0, behavior: "smooth" });
+
+                                // Avisa al resto de secciones: recién ahora
+                                // se ven, así que recién ahora deben animar.
+                                (window as any).invitacionAbierta = true;
+                                window.dispatchEvent(
+                                    new CustomEvent("invitacion-abierta"),
+                                );
+                            },
+                        },
+                        0.5,
+                    );
+            };
+
+            sobreContainer?.addEventListener("click", abrirInvitacion);
+            document
+                .getElementById("instruccion")
+                ?.addEventListener("click", abrirInvitacion);
+            sobreContainer?.addEventListener("keydown", (e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    abrirInvitacion();
+                }
+            });
+        });
+    }
+</script>
