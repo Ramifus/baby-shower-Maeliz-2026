@@ -78,6 +78,20 @@ const corazones = [
         <p class="np-nombre">{papa}</p>
       </div>
 
+      <!-- La foto de los papás, con el paspartú blanco de la casa para que
+           no quede apoyada directamente sobre el fondo. -->
+      <figure id="np-foto">
+        <img
+          id="np-foto-img"
+          src="/imagenes/fotopadres.jpeg"
+          alt="Barbarita y Víctor"
+          width="841"
+          height="1264"
+          loading="lazy"
+          decoding="async"
+        />
+      </figure>
+
       <!-- El recuadro: fondo crema, borde fino redondeado y su adorno
            centrado arriba. Adentro va el mensaje. -->
       <div id="np-recuadro">
@@ -237,6 +251,30 @@ const corazones = [
     width: 4.4cqw;
     height: auto;
     fill: var(--rosa-bebe);
+  }
+
+  /* ── Foto de los papás ── */
+  /* El mismo paspartú blanco sobre aro crema que usa la ecografía: la foto
+     no se apoya directamente sobre el fondo. El blanco va como imagen, que
+     el modo oscuro forzado respeta. */
+  #np-foto {
+    position: relative;
+    z-index: 3;
+    width: 62cqw;
+    margin: 8cqw auto 0;
+    padding: 2.6cqw;
+    background-image: linear-gradient(#ffffff, #ffffff);
+    border: 1px solid #ecd4d2;
+    border-radius: 3.6cqw;
+    box-shadow:
+      0 0 0 1cqw #fdf3f1,
+      0 4px 12px rgba(190, 150, 145, 0.26);
+  }
+
+  #np-foto-img {
+    width: 100%;
+    height: auto;
+    border-radius: 2.4cqw;
   }
 
   /* ── Recuadro del mensaje ── */
@@ -400,6 +438,7 @@ const corazones = [
       gsap.set(".np-filete", { opacity: 0 });
       gsap.set(".np-nombre", { opacity: 0, y: 18 });
       gsap.set("#np-nexo", { opacity: 0, scale: 0.5 });
+      gsap.set("#np-foto", { opacity: 0, y: 16 });
       gsap.set("#np-recuadro", { opacity: 0, y: 16 });
       gsap.set("#np-cierre", { opacity: 0, scale: 0.5 });
       gsap.set("#np-pato", { opacity: 0, y: 14 });
@@ -456,6 +495,11 @@ const corazones = [
             0.7,
           )
 
+          .to(
+            "#np-foto",
+            { opacity: 1, y: 0, duration: 1.2, ease: "power2.out" },
+            0.75,
+          )
           .to(
             "#np-recuadro",
             { opacity: 1, y: 0, duration: 1.2, ease: "power2.out" },
