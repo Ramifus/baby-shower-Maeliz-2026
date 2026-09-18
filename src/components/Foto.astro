@@ -1,0 +1,302 @@
+---
+// src/components/Foto.astro
+// La ecografía, enmarcada. Misma tarjeta crema con pespunte que el código de
+// vestimenta, y adentro la foto con su paspartú blanco: la ecografía viene
+// sobre fondo negro y el blanco la separa del crema para que no se vea como
+// un rectángulo pegado encima.
+//
+// La imagen es /imagenes/foto1-recorte.png, que es foto1.png sin la columna
+// de datos del ecógrafo ni la regla del costado. El original quedó intacto.
+
+const foto = {
+  titulo: "Mi primera foto",
+  texto: "Así me veo mientras espero el día de conocerte.",
+};
+
+// El mismo corazoncito que usan los demás bloques.
+const CORAZON =
+  "M10 17 C 1 9.5, 0.5 4, 4.5 1.8 C 7.2 0.3, 9 2.5, 10 4.6 C 11 2.5, 12.8 0.3, 15.5 1.8 C 19.5 4, 19 9.5, 10 17 Z";
+
+// Corazones sueltos en las esquinas del marco, como en los demás bloques:
+// cada uno con su tono, su tamaño y su propio ritmo de latido.
+const corazones = [
+  { top: "3cqw", left: "6cqw", size: "3cqw", color: "var(--rosa-bebe)", dur: "3.1s", delay: "0.5s" },
+  { top: "8cqw", right: "7cqw", size: "2.6cqw", color: "#f3b9c6", dur: "2.7s", delay: "1.1s" },
+];
+---
+
+<section id="foto-section">
+  <div id="ft-wrap">
+    <!-- ═══════ TARJETA ═══════ -->
+    <div id="ft-card">
+      {
+        corazones.map((c) => (
+          <svg
+            class="ft-latido"
+            viewBox="0 0 20 18"
+            aria-hidden="true"
+            style={`top:${c.top}; ${c.left ? `left:${c.left};` : `right:${c.right};`} width:${c.size}; color:${c.color}; animation-duration:${c.dur}; animation-delay:${c.delay};`}
+          >
+            <path d={CORAZON} fill="currentColor" />
+          </svg>
+        ))
+      }
+
+      <p id="ft-titulo" class="font-halfterm">{foto.titulo}</p>
+
+      <!-- el separador de la casa: dos líneas que se desvanecen y el
+           corazón al centro -->
+      <div id="ft-divisor">
+        <span class="ft-div-linea"></span>
+        <svg class="ft-div-corazon" viewBox="0 0 20 18" aria-hidden="true">
+          <path d={CORAZON}></path>
+        </svg>
+        <span class="ft-div-linea ft-div-linea-der"></span>
+      </div>
+
+      <!-- ── El marco ── -->
+      <!-- El paspartú blanco es quien manda el tamaño; la foto va adentro
+           con sus propias esquinas redondeadas. -->
+      <figure id="ft-marco">
+        <img
+          id="ft-foto"
+          src="/imagenes/foto1-recorte.png"
+          alt="Ecografía de la bebé"
+          width="699"
+          height="571"
+          loading="lazy"
+          decoding="async"
+        />
+        <!-- el velo: oscurece apenas las esquinas para que el negro de la
+             ecografía no termine en un borde duro -->
+        <span id="ft-velo" aria-hidden="true"></span>
+      </figure>
+
+      <p id="ft-texto" class="font-halfterm">{foto.texto}</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  #foto-section {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    overflow-x: hidden;
+    background: transparent;
+    padding: 1rem 0 2rem;
+  }
+
+  #ft-wrap {
+    position: relative;
+    width: min(100vw, 480px);
+    container-type: inline-size;
+  }
+
+  /* ═══════ TARJETA ═══════ */
+  /* El mismo marco crema con pespunte que las demás. El crema va como imagen:
+     el modo oscuro forzado oscurece los colores pero respeta las imágenes. */
+  #ft-card {
+    position: relative;
+    z-index: 2;
+    margin: 0 5cqw;
+    padding: 8cqw 5cqw 8cqw;
+    text-align: center;
+    background-image: linear-gradient(#fdf3f1, #fdf3f1);
+    border: 1px solid #f0d7d6;
+    border-radius: 6cqw;
+    box-shadow: 0 3px 14px rgba(200, 165, 155, 0.18);
+  }
+
+  /* el pespunte, una línea cortada por dentro del borde */
+  #ft-card::before {
+    content: "";
+    position: absolute;
+    inset: 2cqw;
+    border: 1px dashed #e9c3c4;
+    border-radius: 4.4cqw;
+    pointer-events: none;
+  }
+
+  /* ── Corazones sueltos ── */
+  .ft-latido {
+    position: absolute;
+    z-index: 3;
+    height: auto;
+    pointer-events: none;
+    animation-name: ft-latir;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+  }
+
+  @keyframes ft-latir {
+    0%,
+    100% {
+      transform: scale(1);
+      opacity: 0.85;
+    }
+    50% {
+      transform: scale(1.18);
+      opacity: 1;
+    }
+  }
+
+  /* ── Título y texto ── */
+  #ft-titulo {
+    position: relative;
+    z-index: 2;
+    margin: 0;
+    font-size: 8.6cqw;
+    line-height: 1.15;
+    font-weight: 400;
+    color: var(--fucsia-texto);
+  }
+
+  #ft-divisor {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2.6cqw;
+    margin-top: 2.6cqw;
+  }
+
+  /* la línea nace transparente y se va tiñendo hacia el corazón */
+  .ft-div-linea {
+    display: block;
+    width: 16cqw;
+    height: 1px;
+    background-image: linear-gradient(
+      to right,
+      rgba(169, 192, 141, 0),
+      var(--verde-suave)
+    );
+  }
+
+  .ft-div-linea-der {
+    background-image: linear-gradient(
+      to left,
+      rgba(169, 192, 141, 0),
+      var(--verde-suave)
+    );
+  }
+
+  .ft-div-corazon {
+    flex: none;
+    width: 4cqw;
+    height: auto;
+    fill: var(--rosa-bebe);
+  }
+
+  /* ── El marco ── */
+  /* El paspartú: blanco, con el mismo aro que las muestras de la paleta, para
+     que la foto no quede apoyada directamente sobre el crema. */
+  #ft-marco {
+    position: relative;
+    z-index: 2;
+    margin: 6cqw 0 0;
+    padding: 2.6cqw;
+    background-image: linear-gradient(#ffffff, #ffffff);
+    border: 1px solid #ecd4d2;
+    border-radius: 3.4cqw;
+    box-shadow:
+      0 0 0 1cqw #fdf3f1,
+      0 4px 12px rgba(190, 150, 145, 0.26);
+    overflow: hidden;
+  }
+
+  #ft-foto {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 2.2cqw;
+    user-select: none;
+    -webkit-user-drag: none;
+    pointer-events: none;
+  }
+
+  /* el velo se apoya sobre la foto, dentro del paspartú */
+  #ft-velo {
+    position: absolute;
+    inset: 2.6cqw;
+    border-radius: 2.2cqw;
+    pointer-events: none;
+    background-image: radial-gradient(
+      120% 110% at 50% 45%,
+      rgba(0, 0, 0, 0) 55%,
+      rgba(70, 45, 40, 0.22) 100%
+    );
+  }
+
+  #ft-texto {
+    position: relative;
+    z-index: 2;
+    margin: 5cqw auto 0;
+    max-width: 74cqw;
+    font-size: 5.4cqw;
+    line-height: 1.45;
+    font-weight: 400;
+    color: var(--beige-texto);
+  }
+</style>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+  gsap.registerPlugin(ScrollTrigger);
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const inicial = () => {
+      gsap.set("#ft-card", { opacity: 0, y: 24, scale: 0.97 });
+      gsap.set("#ft-titulo", { opacity: 0, y: -16 });
+      gsap.set("#ft-divisor", { opacity: 0, scaleX: 0.3 });
+      // el marco entra creciendo, como una foto que se apoya
+      gsap.set("#ft-marco", { opacity: 0, y: 20, scale: 0.92 });
+      gsap.set("#ft-texto", { opacity: 0, y: 14 });
+    };
+
+    inicial();
+
+    ScrollTrigger.create({
+      trigger: "#foto-section",
+      start: "top 82%",
+      onEnter: () => {
+        const tl = gsap.timeline();
+        tl.to(
+          "#ft-card",
+          { opacity: 1, y: 0, scale: 1, duration: 1.1, ease: "power2.out" },
+          0,
+        )
+          .to(
+            "#ft-titulo",
+            { opacity: 1, y: 0, duration: 1.1, ease: "power2.out" },
+            0.2,
+          )
+          .to(
+            "#ft-divisor",
+            { opacity: 1, scaleX: 1, duration: 1.1, ease: "power3.out" },
+            0.35,
+          )
+          .to(
+            "#ft-marco",
+            {
+              opacity: 1,
+              y: 0,
+              scale: 1,
+              duration: 1.2,
+              ease: "back.out(1.3)",
+            },
+            0.5,
+          )
+          .to(
+            "#ft-texto",
+            { opacity: 1, y: 0, duration: 1.1, ease: "power2.out" },
+            0.8,
+          );
+      },
+      onLeaveBack: inicial,
+    });
+  });
+</script>
