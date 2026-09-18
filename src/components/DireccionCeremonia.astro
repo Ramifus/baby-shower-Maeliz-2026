@@ -18,10 +18,13 @@ const lugar = {
 const mapa =
   "https://www.google.com/maps/search/?api=1&query=-11.021406,-68.758619";
 
-// La respuesta no sale a ningún lado todavía: se queda en el navegador y el
-// invitado ve el acuse. Cuando esté la base de datos, el envío se engancha
-// en la función responder() del script de abajo, que ya es el único lugar
-// donde se decide qué pasa al contestar.
+// La respuesta va al panel de invitados: se guarda en la fila del propio
+// invitado, identificada por el código que trae el link (?i=k7m2p), así nadie
+// confirma por otro. Todo eso pasa en la función responder() del script de
+// abajo, que es el único lugar donde se decide qué pasa al contestar.
+// Si el link no trae código —alguien entró a la invitación pelada— la
+// respuesta se queda en el navegador, como antes, y el invitado igual ve el
+// acuse: la invitación nunca se rompe delante de nadie.
 // WhatsApps de los papás, por si hicieran falta: mami 59170732122,
 // papi 59177647481 (Bolivia, +591).
 
@@ -777,6 +780,12 @@ const CORAZON =
 <script>
   import { gsap } from "gsap";
   import { ScrollTrigger } from "gsap/ScrollTrigger";
+  import {
+    codigoDelLink,
+    datosInvitado,
+    confirmarAsistencia,
+    alCambiarInvitado,
+  } from "../lib/invitado";
   gsap.registerPlugin(ScrollTrigger);
 
   document.addEventListener("DOMContentLoaded", () => {
@@ -823,12 +832,16 @@ const CORAZON =
       };
 
       // ── Acuse de la respuesta ──
-      // Queda guardado en el navegador para que siga ahí si vuelve a abrir
-      // la invitación. Si el navegador lo tiene bloqueado, no pasa nada: el
-      // cartel se ve igual hasta que recargue.
+      // Con link personalizado (?i=…) la respuesta vive en el panel y es esa
+      // la que manda: el navegador no guarda nada, así un papá que abre dos
+      // links distintos en el mismo teléfono no ve el acuse del anterior.
+      // Sin código, se guarda en el navegador como antes, para que el cartel
+      // siga ahí si vuelve a abrir la invitación.
+      const conPanel = Boolean(codigoDelLink());
       const CLAVE = "gansa-verde-asistencia";
 
       const leerRespuesta = () => {
+        if (conPanel) return null;
         try {
           return window.localStorage.getItem(CLAVE);
         } catch {
@@ -837,6 +850,7 @@ const CORAZON =
       };
 
       const guardarRespuesta = (valor: string) => {
+        if (conPanel) return;
         try {
           window.localStorage.setItem(CLAVE, valor);
         } catch {
@@ -861,16 +875,59 @@ const CORAZON =
         }
       };
 
+      // se saca el cartel cuando la base dice que todavía no contestó
+      const ocultarAcuse = () => {
+        if (!hecho) return;
+        hecho.classList.remove("cf-hecho-visible", "cf-hecho-no");
+        hecho.hidden = true;
+      };
+
       // al abrir la página, si ya contestó antes, el cartel ya está puesto
       mostrarAcuse(leerRespuesta(), false);
 
-      // Único lugar donde se decide qué pasa al contestar. Hoy solo guarda y
-      // muestra el acuse; acá adentro va a entrar el envío a la base de
-      // datos, junto con nombreInvitado() para saber quién contestó.
+      // ── Lo que dice el panel ──────────────────────────────────
+      // Una sola función para los dos momentos: la primera respuesta y cada
+      // vez que los papás tocan algo mientras el invitado tiene la página
+      // abierta. Así el acuse aparece sin recargar si confirmó desde otro
+      // teléfono, y desaparece si le borran la respuesta.
+      //
+      // Los pases NO están contratados: acá no se elige cantidad ni se
+      // cargan acompañantes, solo sí o no.
+      const aplicarPanel = (inv: any) => {
+        if (!inv) return;
+
+        // El panel puede apagar la confirmación. Se pregunta por === false
+        // para que un evento sin esa clave siga mostrándola, como estaba.
+        const apagada = inv.funciones && inv.funciones.confirmacion === false;
+
+        // visibility y no display: el arco crema es lo que le da altura al
+        // bloque, y sacarlo del flujo dejaría al arco rosa —que va absoluto—
+        // desbordando sobre la sección de abajo. Se vuelve a poner si la
+        // prenden de nuevo mientras la invitación está abierta.
+        const arco = document.getElementById("cf-arco");
+        if (arco) {
+          arco.style.visibility = apagada ? "hidden" : "";
+          arco.style.pointerEvents = apagada ? "none" : "";
+        }
+        if (apagada) return;
+
+        if (inv.confirmado === true) mostrarAcuse("si", true);
+        else if (inv.confirmado === false) mostrarAcuse("no", true);
+        else ocultarAcuse();
+      };
+
+      datosInvitado().then(aplicarPanel);
+      alCambiarInvitado(aplicarPanel);
+
+      // Único lugar donde se decide qué pasa al contestar: guarda la
+      // respuesta en el panel y muestra el acuse. confirmarAsistencia nunca
+      // lanza —si la base está caída o el link no trae código devuelve null—
+      // así que el invitado ve el agradecimiento pase lo que pase.
       const responder = (valor: string) => {
         guardarRespuesta(valor);
         mostrarAcuse(valor, true);
         window.setTimeout(cerrarModal, 220);
+        confirmarAsistencia(valor === "si");
       };
 
       const nombreInvitado = () =>

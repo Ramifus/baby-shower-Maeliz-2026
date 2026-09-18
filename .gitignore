@@ -26,3 +26,8 @@ pnpm-debug.log*
 # respaldo local de las imagenes sin comprimir: los originales ya viven
 # en el historial de git, no hace falta subirlos otra vez
 imagenes-originales/
+
+# copias duplicadas que quedaron de un proceso, no van al sitio
+public copy/
+src copy/
+public/src/

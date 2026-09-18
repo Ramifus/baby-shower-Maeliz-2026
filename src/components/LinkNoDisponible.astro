@@ -1,0 +1,215 @@
+---
+// src/components/LinkNoDisponible.astro
+//
+// Cuando los papás borran a un invitado desde el panel, su link deja de
+// existir pero el invitado no se entera: sin esto vería la invitación con el
+// nombre genérico, creería que todo está bien y se presentaría el día del
+// baby shower.
+//
+// Solo aparece cuando la base contestó y no encontró el código. Si la base no
+// responde —proyecto pausado, sin internet— la invitación se muestra normal:
+// dejar afuera a alguien por un problema de conexión sería mucho peor.
+//
+// La paleta y la tipografía son las mismas del resto de la invitación
+// (global.css + font-halfterm): es la única pantalla que el invitado va a ver,
+// así que tiene que parecer parte de la misma invitación.
+
+// El mismo corazoncito que usan los demás bloques.
+const CORAZON =
+  "M10 17 C 1 9.5, 0.5 4, 4.5 1.8 C 7.2 0.3, 9 2.5, 10 4.6 C 11 2.5, 12.8 0.3, 15.5 1.8 C 19.5 4, 19 9.5, 10 17 Z";
+---
+
+<div
+  id="link-no-disponible"
+  role="alertdialog"
+  aria-labelledby="lnd-titulo"
+  hidden
+>
+  <div id="lnd-caja">
+    <!-- el mismo moño con flores que corona las tarjetas -->
+    <img id="lnd-mono" src="/imagenes/separador.png" alt="" />
+
+    <h1 id="lnd-titulo" class="font-halfterm">Invitación no disponible</h1>
+
+    <!-- el separador de la fecha: dos líneas que se desvanecen y el corazón -->
+    <div id="lnd-divisor">
+      <span class="lnd-div-linea"></span>
+      <svg class="lnd-div-corazon" viewBox="0 0 20 18" aria-hidden="true">
+        <path d={CORAZON}></path>
+      </svg>
+      <span class="lnd-div-linea lnd-div-linea-der"></span>
+    </div>
+
+    <p id="lnd-texto" class="font-halfterm">
+      Este enlace ya no está activo.<br />
+      Si crees que se trata de un error, avísanos y con gusto te enviaremos uno
+      nuevo.
+    </p>
+  </div>
+</div>
+
+<style>
+  /* Tapa la invitación entera. z-index alto: por encima de la portada, del
+     modal de confirmación y de cualquier cosa que esté animándose debajo. */
+  #link-no-disponible {
+    position: fixed;
+    inset: 0;
+    /* por encima de todo: la portada va en 10000 y el modal de confirmación
+       en 60, y esto tiene que taparlos a los dos */
+    z-index: 20000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6vw;
+    /* el mismo fondo del body, declarado como imagen y no como color: el
+       modo oscuro forzado oscurece los colores pero respeta las imágenes.
+       Tiene que ser opaco, que esto tapa la invitación entera. */
+    background-image: linear-gradient(#fbfdf8, #fbfdf8);
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+
+  /* `hidden` de HTML no gana contra display:flex si no se lo dice */
+  #link-no-disponible[hidden] {
+    display: none;
+  }
+
+  #lnd-caja {
+    position: relative;
+    width: min(90vw, 400px);
+    container-type: inline-size;
+    margin-top: 10cqw;
+    padding: 16cqw 8cqw 10cqw;
+    text-align: center;
+    /* el mismo crema con lluvia de puntitos rosas de la tarjeta del pase */
+    background-image: radial-gradient(
+        circle,
+        rgba(233, 195, 196, 0.5) 1px,
+        transparent 1.3px
+      ),
+      linear-gradient(#fdf3f1, #fdf3f1);
+    background-size:
+      22px 22px,
+      auto;
+    border: 1px solid #f0d7d6;
+    border-radius: 9cqw;
+    box-shadow: 0 3px 14px rgba(200, 165, 155, 0.18);
+  }
+
+  /* el pespunte por dentro del borde */
+  #lnd-caja::before {
+    content: "";
+    position: absolute;
+    inset: 2cqw;
+    border: 1px dashed #e9c3c4;
+    border-radius: 7.4cqw;
+    pointer-events: none;
+  }
+
+  #lnd-mono {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 50cqw;
+    height: auto;
+    transform: translate(-50%, -55%);
+    display: block;
+    user-select: none;
+    -webkit-user-drag: none;
+    pointer-events: none;
+  }
+
+  #lnd-titulo {
+    position: relative;
+    z-index: 2;
+    margin: 0;
+    font-size: 10cqw;
+    line-height: 1.2;
+    font-weight: 400;
+    color: var(--fucsia-texto);
+  }
+
+  #lnd-divisor {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2.6cqw;
+    margin-top: 3cqw;
+  }
+
+  .lnd-div-linea {
+    display: block;
+    width: 14cqw;
+    height: 1px;
+    background-image: linear-gradient(
+      to right,
+      rgba(169, 192, 141, 0),
+      var(--verde-suave)
+    );
+  }
+
+  .lnd-div-linea-der {
+    background-image: linear-gradient(
+      to left,
+      rgba(169, 192, 141, 0),
+      var(--verde-suave)
+    );
+  }
+
+  .lnd-div-corazon {
+    flex: none;
+    width: 4cqw;
+    height: auto;
+    fill: var(--rosa-bebe);
+  }
+
+  #lnd-texto {
+    position: relative;
+    z-index: 2;
+    margin: 4cqw auto 0;
+    max-width: 68cqw;
+    font-size: 5.6cqw;
+    line-height: 1.6;
+    font-weight: 400;
+    color: var(--beige-texto);
+  }
+</style>
+
+<script>
+  import { estadoDelLink, alCambiarInvitado } from "../lib/invitado";
+
+  if (typeof window !== "undefined") {
+    function taparSiNoExiste(estado: string) {
+      if (estado !== "no-existe") return;
+
+      const pantalla = document.getElementById("link-no-disponible");
+      if (!pantalla || !pantalla.hidden) return;
+
+      // La invitación queda debajo, tapada: no se desmonta nada porque GSAP
+      // ya está corriendo y desarmarlo a mano es más frágil que taparlo.
+      pantalla.hidden = false;
+      document.documentElement.style.overflow = "hidden";
+      document.body.style.overflow = "hidden";
+      requestAnimationFrame(() => {
+        pantalla.style.opacity = "1";
+      });
+
+      // Si hay música o video sonando, se corta: la invitación ya no es de nadie.
+      for (const sonido of document.querySelectorAll("audio, video")) {
+        try {
+          (sonido as HTMLMediaElement).pause();
+        } catch {
+          /* algunos navegadores no dejan pausar antes de interactuar */
+        }
+      }
+    }
+
+    estadoDelLink().then(taparSiNoExiste);
+
+    // Si lo borran mientras tiene la invitación abierta, la pantalla aparece
+    // sin que tenga que recargar.
+    alCambiarInvitado((_inv, estado) => taparSiNoExiste(estado));
+  }
+</script>

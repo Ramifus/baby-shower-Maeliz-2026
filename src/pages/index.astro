@@ -14,9 +14,14 @@ import Despedida from "../components/Despedida.astro";
 import Restriccion from "../components/Restriccion.astro";
 import SugerenciaRegalo from "../components/SugerenciaRegalo.astro";
 import Regalo from "../components/Regalo.astro";
+import LinkNoDisponible from "../components/LinkNoDisponible.astro";
 ---
 
 <Layout title="Baby Shower">
+    <!-- Si los papás borraron a este invitado desde el panel, esto tapa la
+         invitación entera. Va arriba de todo. -->
+    <LinkNoDisponible />
+
     <!-- PORTADA (se muestra primero, bloquea el scroll) -->
     <Portada />
 

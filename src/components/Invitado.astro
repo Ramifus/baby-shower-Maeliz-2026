@@ -235,7 +235,31 @@ const corazones = [
 <script>
   import { gsap } from "gsap";
   import { ScrollTrigger } from "gsap/ScrollTrigger";
+  import { datosInvitado, alCambiarInvitado } from "../lib/invitado";
   gsap.registerPlugin(ScrollTrigger);
+
+  // ═══════ EL NOMBRE, DESDE EL PANEL ═══════
+  // Lo único que esta invitación toma de la base: el nombre. Los pases NO
+  // están contratados, así que la tarjeta no muestra ni número ni frases que
+  // dependan de él.
+  //
+  // El texto se escribe en #in-nombre, que es el único lugar donde vive el
+  // nombre: el modal de confirmación lo vuelve a pedir a la base por su
+  // cuenta, y el tamaño es fijo (9cqw), así que un nombre largo baja de
+  // renglón en vez de achicarse hasta volverse ilegible.
+  //
+  // Si el link no trae ?i=, si la base no responde o si el invitado no
+  // existe, queda el nombre del render y la invitación no se rompe.
+  function pintarNombre(inv) {
+    if (!inv || !inv.nombre) return;
+    const el = document.getElementById("in-nombre");
+    if (el) el.textContent = inv.nombre;
+  }
+
+  datosInvitado().then(pintarNombre);
+  // Si los papás le corrigen el nombre mientras tiene la invitación abierta,
+  // lo ve cambiar sin recargar.
+  alCambiarInvitado(pintarNombre);
 
   document.addEventListener("DOMContentLoaded", () => {
     const inicial = () => {
